@@ -1,6 +1,6 @@
 import {FakeData,User} from "tweeter-shared";
 import { Link } from "react-router-dom";
-import useUserInfo from "../useUserInfo";
+import useUserNavigation from "../useUserNavigation";
 
 interface Props {
   value: User;
@@ -8,7 +8,7 @@ interface Props {
 
 const UserItem = (props: Props) => {
 
-  const { navigateToUser } = useUserInfo(async (alias: string) => {
+  const { navigateToUser } = useUserNavigation(async (alias: string) => {
     return FakeData.instance.findUserByAlias(alias); // TODO: PLEASE REPLACE THIS WITH REAL DATA, FEEL FREE TO REPLACE EVERYYYY THING IN THIS FILE
   });
   
