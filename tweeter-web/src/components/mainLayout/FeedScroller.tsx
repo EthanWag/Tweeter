@@ -1,5 +1,5 @@
 import {FakeData} from "tweeter-shared";
-import StatusItem from "./StatusItem";
+import StatusItemScroller from "./StatusItemScroller";
 
 const FeedScroller = () => {
 
@@ -8,9 +8,12 @@ const FeedScroller = () => {
 
 
   return ( // makes it so you can put whatever you want in the feed
-    <StatusItem 
+    <StatusItemScroller 
       posts={FakeData.instance.getPageOfStatuses}
-      users={FakeData.instance.findUserByAlias}
+      fetchUser={(alias:string) => {
+        return Promise.resolve(FakeData.instance.findUserByAlias(alias)); // TODO: Replace with REAL VALUES, RIGHT NOW IT'S DUMMY FAKE
+      }}
+      parent="Feed"
     />
   )
 };

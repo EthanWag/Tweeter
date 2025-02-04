@@ -13,6 +13,8 @@ const AppNavbar = () => {
   const { displayInfoMessage, displayErrorMessage, clearLastInfoMessage } =
     useToastListener();
 
+  // const navigationItems = useNavigateHook();
+
   const logOut = async () => {
     displayInfoMessage("Logging Out...", 0);
 
@@ -57,10 +59,10 @@ const AppNavbar = () => {
           </div>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
+        <Navbar.Collapse id="responsive-navbar-nav"> 
           <Nav className="ml-auto">
             <Nav.Item>
-              <NavLink to="/feed">Feed</NavLink>
+              <NavLink to="/feed">Feed</NavLink> // navLink, one with name, the other with path
             </Nav.Item>
             <Nav.Item>
               <NavLink to="/story">Story</NavLink>
