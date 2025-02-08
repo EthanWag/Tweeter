@@ -1,5 +1,5 @@
 import { AuthToken, User } from "tweeter-shared";
-import useToastListener from "./toaster/ToastListenerHook";
+import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfo from "./useUserInfo";
 
 

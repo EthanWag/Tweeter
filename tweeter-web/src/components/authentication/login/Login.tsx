@@ -8,7 +8,7 @@ import AuthenticationFormLayout from "../AuthenticationFormLayout";
 import { AuthToken, FakeData, User } from "tweeter-shared";
 import useToastListener from "../../toaster/ToastListenerHook";
 import AuthenticationFields from "../AuthenticationFields";
-import useUserInfo from "../../useUserInfo";
+import useUserInfo from "../../hooks/useUserInfo";
 
 interface Props {
   originalUrl?: string;

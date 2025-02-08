@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import UserItem from "../userItem/UserItem";
 import useToastListener from "../toaster/ToastListenerHook";
-import useUserInfo from "../useUserInfo";
+import useUserInfo from "../hooks/useUserInfo";
 import { UserItemPresenter, UserItemView } from "../../presenter/UserItemPresenter";
 
 interface Props {

@@ -13,7 +13,7 @@ import Toaster from "./components/toaster/Toaster";
 import FeedScroller from "./components/mainLayout/FeedScroller";
 import StoryScroller from "./components/mainLayout/StoryScroller";
 import UserItemScroller from "./components/mainLayout/UserItemScroller";
-import useUserInfo from "./components/useUserInfo";
+import useUserInfo from "./components/hooks/useUserInfo";
 import { FolloweePresenter} from './presenter/FolloweePresenter';
 import { UserItemView } from "./presenter/UserItemPresenter";
 import { FollowerPresenter } from "./presenter/FollowerPresenter";

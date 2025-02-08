@@ -4,7 +4,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import Image from "react-bootstrap/Image";
 import { AuthToken } from "tweeter-shared";
 import useToastListener from "../toaster/ToastListenerHook";
-import useUserInfo from "../useUserInfo";
+import useUserInfo from "../hooks/useUserInfo";
 
 const AppNavbar = () => {
   const location = useLocation();
