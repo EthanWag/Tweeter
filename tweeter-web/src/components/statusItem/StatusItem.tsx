@@ -1,6 +1,6 @@
 import {Status,FakeData} from "tweeter-shared";
 import {Link} from "react-router-dom";
-import Post from "../statusItem/Post";
+import Post from "./Post";
 
 
 interface Props {

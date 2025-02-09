@@ -11,7 +11,7 @@ export class FollowService {
         return FakeData.instance.getPageOfUsers(lastItem, pageSize, userAlias);
       };
     
-      public  async loadMoreFollowees  (
+      public async loadMoreFollowees (
         authToken: AuthToken,
         userAlias: string,
         pageSize: number,

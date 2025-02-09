@@ -12,6 +12,7 @@ const PostStatus = () => {
   const [post, setPost] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // take this mofo out
   const submitPost = async (event: React.MouseEvent) => {
     event.preventDefault();
 

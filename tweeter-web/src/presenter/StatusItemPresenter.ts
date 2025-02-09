@@ -1,19 +1,19 @@
-import { AuthToken, User } from "tweeter-shared";
+import { AuthToken, Status } from "tweeter-shared";
 
-export interface UserItemView { 
-    addItems: (newItems: User[]) => void;
+export interface StatusItemView {
+    addItems: (newItems: Status[]) => void;
     displayErrorMessage: (message: string) => void;
 }
 
-export abstract class UserItemPresenter {
+export abstract class StatusItemPresenter {
 
-    private _lastItem : User | null = null
+    private _lastItem: Status | null = null;
     private _hasMoreItems = true;
-    private _view: UserItemView;
+    private _view: StatusItemView;
 
-    protected constructor(view: UserItemView){
+    protected constructor(view: StatusItemView) {
         this._view = view;
-    }   
+    }
 
     protected get view() {
         return this._view;
@@ -23,7 +23,7 @@ export abstract class UserItemPresenter {
         return this._lastItem;
     }
 
-    protected set lastItem(item: User | null) {
+    protected set lastItem(item: Status | null) {
         this._lastItem = item;
     }
 
@@ -40,6 +40,6 @@ export abstract class UserItemPresenter {
         this._hasMoreItems = true;
     }
 
-    public abstract loadMoreItems(authToken: AuthToken, userAlias: string): void;
+    public abstract loadMoreItems(authToken:AuthToken, userAlias:string): void;
 
 }
