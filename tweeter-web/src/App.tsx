@@ -19,6 +19,8 @@ import StatusItemScroller from "./components/mainLayout/StatusItemScroller";
 import { StatusItemView } from "./presenter/StatusItemPresenter";
 import { FeedPresenter } from "./presenter/FeedPresenter";
 import { StoryPresenter } from "./presenter/StoryPresenter";
+import { LoginPresenter } from "./presenter/LoginPresenter";
+import { RegisterPresenter } from './presenter/RegisterPresenter';
 
 const App = () => {
   const { currentUser, authToken } = useUserInfo();
@@ -98,11 +100,16 @@ const AuthenticatedRoutes = () => {
 const UnauthenticatedRoutes = () => {
   const location = useLocation();
 
+
+  // the little red squiggles are because it wants login, alise and others, which we don't have yet ...
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="*" element={<Login originalUrl={location.pathname} />} />
+      <Route path="/login" element={<Login presenterGenerator={(view: AccountView) => new LoginPresenter(view)}/>}/>
+      <Route path="/register" element={<Register presenterGenerator={(view: AccountView) => new RegisterPresenter(view)}/>}/>
+      <Route path="*" element={<Login 
+      presenterGenerator={(view: AccountView) => new LoginPresenter(view)}
+      originalUrl={location.pathname}
+      />}/>
     </Routes>
   );
 };
