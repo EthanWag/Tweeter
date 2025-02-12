@@ -7,25 +7,25 @@ export class LoginPresenter extends AccountPresenter {
     
     private userService : UserService;
 
-    public constructor(view: AccountView, alias: string, password: string){
-        super(view, alias, password); // pass the isloading function here
+    public constructor(view: AccountView){
+        super(view);
         this.userService = new UserService();
     }
 
-  public checkSubmitButtonStatus (): boolean {
-    return !super.alias || !super.password;
+  public checkSubmitButtonStatus (alias:string, password:string): boolean {
+    return !alias || !password;
   };
 
-  public async doLogin(){ // maybe pass in a state function???
+  public async doLogin(alias:string,password:string,rememberMe:boolean,originalUrl?:string){ // maybe pass in a state function???
     try {
       this.view.setIsLoading(true);
 
-      const [user, authToken] = await this.userService.login(super.alias, super.password);
+      const [user, authToken] = await this.userService.login(alias,password);
 
       this.view.updateUserInfo(user, user, authToken, rememberMe);
 
-      if (!!props.originalUrl) {
-        this.view.navigate(props.originalUrl);
+      if (!!originalUrl) {
+        this.view.navigate(originalUrl);
       } else {
         this.view.navigate("/");
       }

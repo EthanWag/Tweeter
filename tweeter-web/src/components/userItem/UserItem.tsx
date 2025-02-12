@@ -8,9 +8,7 @@ interface Props {
 
 const UserItem = (props: Props) => {
 
-  const { navigateToUser } = useUserNavigation(async (alias: string) => {
-    return FakeData.instance.findUserByAlias(alias); // TODO: PLEASE REPLACE THIS WITH REAL DATA, FEEL FREE TO REPLACE EVERYYYY THING IN THIS FILE
-  });
+  const { navigateToUser } = useUserNavigation();
   
   return (
     <div className="col bg-light mx-0 px-0">

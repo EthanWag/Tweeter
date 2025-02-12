@@ -1,7 +1,6 @@
 import "./UserInfo.css";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { AuthToken, FakeData, User } from "tweeter-shared";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfo from "../hooks/useUserInfo";
 import { NetworkPresenter, NetworkView } from "../../presenter/NetworkPresenter";
@@ -21,6 +20,9 @@ const UserInfo = (props: Props) => {
   const { currentUser, authToken, displayedUser, setDisplayedUser } = useUserInfo();
 
   const listener: NetworkView = {
+    setIsFollower: setIsFollower,
+    setFolloweeCount: setFolloweeCount,
+    setFollowerCount: setFollowerCount,
     displayErrorMessage: displayErrorMessage,
   };
 
@@ -34,13 +36,13 @@ const UserInfo = (props: Props) => {
 
     const fetchData = async () => {
       if (authToken && displayedUser) {
-        setIsFollower(await presenter.setIsFollowerStatus(authToken!, currentUser!, displayedUser!));
-        setFolloweeCount(await presenter.setNumbFollowees(authToken!, displayedUser!));
-        setFollowerCount(await presenter.setNumbFollowers(authToken!, displayedUser!));
+        await presenter.setIsFollowerStatus(authToken!, currentUser!, displayedUser!);
+        await presenter.setNumbFollowees(authToken!, displayedUser!);
+        await presenter.setNumbFollowers(authToken!, displayedUser!);
       }
     };
     fetchData();
-    
+
   }, [displayedUser]);
 
 
@@ -88,12 +90,10 @@ const UserInfo = (props: Props) => {
         `Unfollowing ${displayedUser!.name}...`,
         0
       );
-
       const [followerCount, followeeCount] = await presenter.unfollow(
         authToken!,
         displayedUser!
       );
-
       setIsFollower(false);
       setFollowerCount(followerCount);
       setFolloweeCount(followeeCount);

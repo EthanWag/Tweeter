@@ -15,7 +15,7 @@ interface Props {
 
 const StatusItemScroller = (props: Props) => {
   const{displayedUser, authToken} = useUserInfo();
-  const { navigateToUser } = useUserNavigation(/* TODO: Fix this */);
+  const { navigateToUser } = useUserNavigation();
   const { displayErrorMessage } = useToastListener();
   const [items, setItems] = useState<Status[]>([]);
   const [newItems, setNewItems] = useState<Status[]>([]);

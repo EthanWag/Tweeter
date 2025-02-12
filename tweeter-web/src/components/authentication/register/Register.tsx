@@ -38,8 +38,8 @@ const Register = (props: Props) => {
   const [presenter] = useState(props.presenterGenerator(listener));
 
   const registerOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
-    if (event.key == "Enter" && !presenter.checkSubmitButtonStatus()) {
-      presenter.doRegister(rememberMe, imageBytes);
+    if (event.key == "Enter" && !presenter.checkSubmitButtonStatus(firstName, lastName, alias, password, imageUrl, imageFileExtension)){
+      presenter.doRegister(firstName, lastName, alias, password, imageFileExtension, rememberMe, imageBytes);
     }
   };
 
@@ -113,11 +113,13 @@ const Register = (props: Props) => {
       inputFieldGenerator={inputFieldGenerator}
       switchAuthenticationMethodGenerator={switchAuthenticationMethodGenerator}
       setRememberMe={setRememberMe}
-      submitButtonDisabled={presenter.checkSubmitButtonStatus}
+      submitButtonDisabled={() => presenter.checkSubmitButtonStatus(firstName, lastName, alias, password, imageUrl, imageFileExtension)}
       isLoading={isLoading}
-      submit={() => presenter.doRegister(rememberMe, imageBytes)}
+      submit={() => presenter.doRegister(firstName, lastName, alias, password, imageFileExtension, rememberMe, imageBytes)}
     />
   );
 };
 
 export default Register;
+
+// "/Users/ethanwagstaff/Downloads/CS340/Tweeter/tweeter-shared/dist/model/domain/User"

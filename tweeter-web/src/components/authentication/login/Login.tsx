@@ -1,6 +1,5 @@
 import "./Login.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { UserInfoContext } from "../../userInfo/UserInfoProvider";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthenticationFormLayout from "../AuthenticationFormLayout";
@@ -35,8 +34,8 @@ const Login = (props: Props) => {
   const [presenter] = useState(props.presenterGenerator(listener));
   
   const loginOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
-    if (event.key == "Enter" && !presenter.checkSubmitButtonStatus()) {
-      presenter.doLogin();
+    if (event.key == "Enter" && !presenter.checkSubmitButtonStatus(alias, password)){
+      presenter.doLogin( alias, password, rememberMe, props.originalUrl);
     }
   };
 
@@ -68,9 +67,9 @@ const Login = (props: Props) => {
       inputFieldGenerator={inputFieldGenerator}
       switchAuthenticationMethodGenerator={switchAuthenticationMethodGenerator}
       setRememberMe={setRememberMe}
-      submitButtonDisabled={presenter.checkSubmitButtonStatus}
+      submitButtonDisabled={() => presenter.checkSubmitButtonStatus(alias, password)}
       isLoading={isLoading}
-      submit={presenter.doLogin}
+      submit={() => presenter.doLogin(alias, password, rememberMe, props.originalUrl)}
     />
   );
 };

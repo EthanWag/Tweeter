@@ -7,50 +7,50 @@ import { AccountPresenter, AccountView } from "./AccountPresenter";
 export class RegisterPresenter extends AccountPresenter {
     
     private userService : UserService;
-    private firstName: string;
-    private lastName: string;
-    private imageUrl: string;
-    private imageFileExtension: string;
 
-    public constructor(
-        view: AccountView,
-        alias: string,
-        password: string,
-        firstName: string,
-        lastName: string,
-        imageUrl: string,
-        imageFileExtension: string
-    ){
-        super(view, alias, password); // pass the isloading function here
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.imageUrl = imageUrl;
-        this.imageFileExtension = imageFileExtension;
+    public constructor(view: AccountView){
+        super(view); // pass the isloading function here
         this.userService = new UserService();
     }
 
-    public  checkSubmitButtonStatus(): boolean {
+    public checkSubmitButtonStatus(
+        firstName:string,
+        lastName:string,
+        alias:string,
+        password:string,
+        imageUrl:string,
+        imageFileExtension:string
+
+    ): boolean {
         return (
-            !this.firstName ||
-            !this.lastName ||
-            !super.alias ||
-            !super.password ||
-            !this.imageUrl ||
-            !this.imageFileExtension
+            !firstName ||
+            !lastName ||
+            !alias ||
+            !password ||
+            !imageUrl ||
+            !imageFileExtension
         );
     };
 
-    public async doRegister(rememberMe: boolean, imageBytes: Uint8Array) {
+    public async doRegister(
+        firstName: string,
+        lastName: string,
+        alias: string,
+        password: string,
+        imageFileExtension: string,
+        rememberMe: boolean, 
+        imageBytes: Uint8Array
+    ) {
         try {
             this.view.setIsLoading(true);
 
             const [user, authToken] = await this.userService.register(
-            this.firstName,
-            this.lastName,
-            this.alias,
-            this.password,
+            firstName,
+            lastName,
+            alias,
+            password,
             imageBytes,
-            this.imageFileExtension
+            imageFileExtension
             );
 
             this.view.updateUserInfo(user, user, authToken, rememberMe);

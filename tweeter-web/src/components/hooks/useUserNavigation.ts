@@ -1,9 +1,10 @@
 import { AuthToken, User } from "tweeter-shared";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfo from "./useUserInfo";
+import { PostsService } from "../../model/service/PostService";
 
 
-const useUserNavigation = (fetchUser:(alias: string) => Promise<User | null>) => {
+const useUserNavigation = () => {
 
     const { setDisplayedUser, currentUser, authToken } = useUserInfo();
     const { displayErrorMessage } = useToastListener();
@@ -37,7 +38,9 @@ const useUserNavigation = (fetchUser:(alias: string) => Promise<User | null>) =>
       authToken: AuthToken,
       alias: string
     ): Promise<User | null> => {
-      return fetchUser(alias);
+
+
+      return PostsService.getPosts(alias);
     };
     return {navigateToUser};
 }

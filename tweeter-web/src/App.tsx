@@ -21,6 +21,7 @@ import { FeedPresenter } from "./presenter/FeedPresenter";
 import { StoryPresenter } from "./presenter/StoryPresenter";
 import { LoginPresenter } from "./presenter/LoginPresenter";
 import { RegisterPresenter } from './presenter/RegisterPresenter';
+import { AccountView } from "./presenter/AccountPresenter";
 
 const App = () => {
   const { currentUser, authToken } = useUserInfo();
@@ -44,9 +45,6 @@ const App = () => {
 };
 
 const AuthenticatedRoutes = () => {
-  //      <Route path="feed" element={<FeedScroller />} />
-  //      <Route path="story" element={<StoryScroller />} />
-
   return (
     <Routes>
       <Route element={<MainLayout />}>
