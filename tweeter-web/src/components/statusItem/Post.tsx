@@ -8,7 +8,7 @@ interface Props {
 }
 
 const Post = (props: Props) => {
-  const {navigateToUser} = useUserNavigation(props.fetchUser);
+  const {navigateToUser} = useUserNavigation();
 
   return (
     <>

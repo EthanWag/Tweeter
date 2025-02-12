@@ -1,7 +1,7 @@
 import { AuthToken, User } from "tweeter-shared";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfo from "./useUserInfo";
-import { PostsService } from "../../model/service/PostService";
+import { PostPresenter } from "../../presenter/PostPresenter";
 
 
 const useUserNavigation = () => {
@@ -39,8 +39,8 @@ const useUserNavigation = () => {
       alias: string
     ): Promise<User | null> => {
 
-
-      return PostsService.getPosts(alias);
+      const presenter = new PostPresenter(); // maybe not the most efficient way to do this, but whatever
+      return presenter.getPosts(alias);
     };
     return {navigateToUser};
 }
