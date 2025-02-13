@@ -42,10 +42,7 @@ const StatusItem: React.FC<Props> = ({index,item,navigateToUser}) => {
                     </h2>
                     {item.formattedDate}
                     <br /> 
-                    <Post status={item} fetchUser={(alias:string) => {
-                      return Promise.resolve(FakeData.instance.findUserByAlias(alias)); // TODO: Replace with REAL VALUES, RIGHT NOW IT'S DUMMY FAKE
-                    }}
-                    />
+                    <Post status={item}/>
                   </div>
                 </div>
               </div>

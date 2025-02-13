@@ -4,7 +4,6 @@ import useUserNavigation from "../hooks/useUserNavigation";
 
 interface Props {
   status: Status;
-  fetchUser:(alias:string) =>Promise <User | null>
 }
 
 const Post = (props: Props) => {
