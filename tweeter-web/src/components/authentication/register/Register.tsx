@@ -121,5 +121,3 @@ const Register = (props: Props) => {
 };
 
 export default Register;
-
-// "/Users/ethanwagstaff/Downloads/CS340/Tweeter/tweeter-shared/dist/model/domain/User"

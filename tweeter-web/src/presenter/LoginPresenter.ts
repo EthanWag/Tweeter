@@ -1,16 +1,15 @@
 import { UserService } from "../model/service/UserService";
-import { AccountPresenter, AccountView } from "./AccountPresenter";
-
-
+import { AccountPresenter } from "./AccountPresenter";
+import { AccountView } from "./Presenter";
 
 export class LoginPresenter extends AccountPresenter {
     
-    private userService : UserService;
+  private userService : UserService;
 
-    public constructor(view: AccountView){
-        super(view);
-        this.userService = new UserService();
-    }
+  public constructor(view: AccountView){
+      super(view);
+      this.userService = new UserService();
+  }
 
   public checkSubmitButtonStatus (alias:string, password:string): boolean {
     return !alias || !password;
@@ -37,5 +36,4 @@ export class LoginPresenter extends AccountPresenter {
       this.view.setIsLoading(false);
     }
   };
-
 }

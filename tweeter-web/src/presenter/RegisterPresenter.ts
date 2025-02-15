@@ -1,6 +1,7 @@
 import { Buffer } from "buffer";
 import { UserService } from "../model/service/UserService";
-import { AccountPresenter, AccountView } from "./AccountPresenter";
+import { AccountPresenter } from "./AccountPresenter";
+import { AccountView } from "./Presenter";
 
 
 
