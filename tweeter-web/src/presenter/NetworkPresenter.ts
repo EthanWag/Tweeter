@@ -12,39 +12,31 @@ export class NetworkPresenter extends Presenter<NetworkView>{
     }
 
     public async setIsFollowerStatus(authToken: AuthToken,currentUser: User,displayedUser: User) {
-        try {
-            this.view.setIsFollower(
+        
+    this.doTryOperation(async () => {
+
+        this.view.setIsFollower(
             currentUser === displayedUser 
                 ? false 
                 : await this.followService.getIsFollowerStatus(authToken!, currentUser!, displayedUser!)
             );
-        } catch (error) {
-            this.view.displayErrorMessage(`Failed to determine follower status because of exception: ${error}`);
-        }
+        },"determine follower status");
     };
 
     public async setNumbFollowees(authToken: AuthToken,displayedUser: User){
-        try {
+        this.doTryOperation(async () => {
             this.view.setFolloweeCount(
                 await this.followService.getFolloweeCount(authToken,displayedUser)
             );
-        } catch (error) {
-            this.view.displayErrorMessage(
-            `Failed to get followees count because of exception: ${error}`
-            );
-        }
+        },"get followees count");
     };
 
     public async setNumbFollowers(authToken: AuthToken,displayedUser: User){
-        try {
+        this.doTryOperation(async () => {
             this.view.setFollowerCount(
                 await this.followService.getFollowerCount(authToken,displayedUser)
             );
-        } catch (error) {
-            this.view.displayErrorMessage(
-            `Failed to get followers count because of exception: ${error}`
-            );
-        }
+        },"get followers count");
     };
 
     public async follow(authToken: AuthToken,userToFollow: User): Promise<[followerCount: number, followeeCount: number]>{

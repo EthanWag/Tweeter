@@ -1,15 +1,11 @@
-import { AuthToken, Status, User } from "tweeter-shared";
+import { AuthToken, User } from "tweeter-shared";
 
 export interface View {
     displayErrorMessage: (message: string) => void;
 }
 
-export interface UserItemView extends View { 
-    addItems: (newItems: User[]) => void;
-}
-
-export interface StatusItemView extends View {
-    addItems: (newItems: Status[]) => void;
+export interface PagedItemView<T> extends View { 
+    addItems: (newItems: T[]) => void;
 }
 
 export interface AccountView extends View{
@@ -37,17 +33,15 @@ export interface LogoutView extends View {
     clearLastInfoMessage(): void;
 }
 
-export class Presenter<T extends View>{
+export class Presenter<V extends View>{
 
-    private _view: T;
-    // put more stuff here
+    private _view: V;
 
-
-    protected constructor (view:T) {
+    protected constructor (view:V) {
         this._view = view;
     }
 
-    protected get view(): T {
+    protected get view(): V {
         return this._view;
     }
 
@@ -60,4 +54,7 @@ export class Presenter<T extends View>{
             );
         }
     };
+
+
+
 }

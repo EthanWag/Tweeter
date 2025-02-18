@@ -12,7 +12,4 @@ export class PostPresenter {
     public getPosts(alias: string): Promise<User | null> {
         return this.postService.getPosts(alias);
     }
-
-
-
 }
