@@ -11,10 +11,6 @@ export class LoginPresenter extends AccountPresenter {
       this.userService = new UserService();
   }
 
-  public checkSubmitButtonStatus (alias:string, password:string): boolean {
-    return !alias || !password;
-  };
-
   public async doLogin(alias:string,password:string,rememberMe:boolean,originalUrl?:string){
 
     this.doTryOperation(async () => {

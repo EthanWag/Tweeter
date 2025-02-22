@@ -14,25 +14,6 @@ export class RegisterPresenter extends AccountPresenter {
         this.userService = new UserService();
     }
 
-    public checkSubmitButtonStatus(
-        firstName:string,
-        lastName:string,
-        alias:string,
-        password:string,
-        imageUrl:string,
-        imageFileExtension:string
-
-    ): boolean {
-        return (
-            !firstName ||
-            !lastName ||
-            !alias ||
-            !password ||
-            !imageUrl ||
-            !imageFileExtension
-        );
-    };
-
     public async doRegister(
         firstName: string,
         lastName: string,
@@ -42,28 +23,24 @@ export class RegisterPresenter extends AccountPresenter {
         rememberMe: boolean, 
         imageBytes: Uint8Array
     ) {
-        try {
-            this.view.setIsLoading(true);
+        this.doUpdateOperation(async () => {
 
             const [user, authToken] = await this.userService.register(
-            firstName,
-            lastName,
-            alias,
-            password,
-            imageBytes,
-            imageFileExtension
-            );
-
+                firstName,
+                lastName,
+                alias,
+                password,
+                imageBytes,
+                imageFileExtension
+                );
             this.view.updateUserInfo(user, user, authToken, rememberMe);
             this.view.navigate("/");
-        } catch (error) {
-            this.view.displayErrorMessage(
-            `Failed to register user because of exception: ${error}`
-            );
-        } finally {
-            this.view.setIsLoading(false);
-        }
-    };
+
+
+        },
+        "to register user",
+        this.view
+    )};
 
     public handleImageFile (
         file: File | undefined,
