@@ -10,18 +10,22 @@ import Login from "./components/authentication/login/Login";
 import Register from "./components/authentication/register/Register";
 import MainLayout from "./components/mainLayout/MainLayout";
 import Toaster from "./components/toaster/Toaster";
-import UserItemScroller from "./components/mainLayout/UserItemScroller";
 import useUserInfo from "./components/hooks/useUserInfo";
 import { FolloweePresenter} from './presenter/FolloweePresenter';
-import { UserItemView } from "./presenter/UserItemPresenter";
 import { FollowerPresenter } from "./presenter/FollowerPresenter";
-import StatusItemScroller from "./components/mainLayout/StatusItemScroller";
-import { StatusItemView } from "./presenter/StatusItemPresenter";
 import { FeedPresenter } from "./presenter/FeedPresenter";
 import { StoryPresenter } from "./presenter/StoryPresenter";
 import { LoginPresenter } from "./presenter/LoginPresenter";
 import { RegisterPresenter } from './presenter/RegisterPresenter';
-import { AccountView } from "./presenter/AccountPresenter";
+import ItemScroller from "./components/mainLayout/ItemScroller";
+import { Status, User } from "tweeter-shared";
+import { AccountView, PagedItemView } from "./presenter/Presenter";
+import { PagedItemPresenter } from "./presenter/PagedItemPresenter";
+import { StatusService } from "./model/service/StatusService";
+import StatusItem from "./components/statusItem/StatusItem";
+import UserItem from "./components/userItem/UserItem";
+import { FollowService } from "./model/service/FollowService";
+import { JSX } from "react";
 
 const App = () => {
   const { currentUser, authToken } = useUserInfo();
@@ -53,39 +57,47 @@ const AuthenticatedRoutes = () => {
         <Route
           path="feed"
           element={
-            <StatusItemScroller
+            <ItemScroller<Status,PagedItemView<Status>,StatusService,PagedItemPresenter<Status,StatusService>>
               key={1}
-              presenterGenerator={(view: StatusItemView) => new FeedPresenter(view)}
-              />
+              presenterGenerator={(view: PagedItemView<Status>) => new FeedPresenter(view)} 
+              itemGenerator={function (index: number, item: Status): JSX.Element {
+                return <StatusItem index={index} item={item}/>;
+            }}/>
           }
         />
 
       <Route
         path="story"
         element={
-          <StatusItemScroller
+          <ItemScroller<Status,PagedItemView<Status>,StatusService,PagedItemPresenter<Status,StatusService>>
             key={2}
-            presenterGenerator={(view: StatusItemView) => new StoryPresenter(view)}
-            />
-          }
-        />
+            presenterGenerator={(view: PagedItemView<Status>) => new StoryPresenter(view)} 
+            itemGenerator={function (index: number, item: Status): JSX.Element {
+              return <StatusItem index={index} item={item}/>;
+          }}/>
+        }
+      />
         
         <Route
           path="followees"
           element={
-            <UserItemScroller
+            <ItemScroller<User,PagedItemView<User>,FollowService,PagedItemPresenter<User,FollowService>>
               key={3}
-                presenterGenerator={(view: UserItemView) => new FolloweePresenter(view)}
-            />
+              presenterGenerator={(view: PagedItemView<User>) => new FolloweePresenter(view)} 
+              itemGenerator={function (index: number, item: User): JSX.Element {
+                return <UserItem index={index} value={item}/>;
+            }}/>
           }
         />
         <Route
           path="followers"
           element={
-            <UserItemScroller
-              key={4} 
-              presenterGenerator={(view: UserItemView) => new FollowerPresenter(view)}
-            />
+            <ItemScroller<User,PagedItemView<User>,FollowService,PagedItemPresenter<User,FollowService>>
+              key={3}
+              presenterGenerator={(view: PagedItemView<User>) => new FollowerPresenter(view)} 
+              itemGenerator={function (index: number, item: User): JSX.Element {
+                return <UserItem index={index} value={item}/>;
+            }}/>
           }
         />
         <Route path="logout" element={<Navigate to="/login" />} />

@@ -14,7 +14,6 @@ export class NetworkPresenter extends Presenter<NetworkView>{
     public async setIsFollowerStatus(authToken: AuthToken,currentUser: User,displayedUser: User) {
         
     this.doTryOperation(async () => {
-
         this.view.setIsFollower(
             currentUser === displayedUser 
                 ? false 
@@ -39,6 +38,8 @@ export class NetworkPresenter extends Presenter<NetworkView>{
         },"get followers count");
     };
 
+
+    // these two I'll leave in even thought they are duplicate, this is because their funcationallity can change
     public async follow(authToken: AuthToken,userToFollow: User): Promise<[followerCount: number, followeeCount: number]>{
         // Pause so we can see the follow message. Remove when connected to the server
         await new Promise((f) => setTimeout(f, 2000));

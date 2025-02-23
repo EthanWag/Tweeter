@@ -3,8 +3,10 @@ import { Outlet } from "react-router-dom";
 import AppNavbar from "../appNavbar/AppNavbar";
 import PostStatus from "../postStatus/PostStatus";
 import UserInfo from "../userInfo/UserInfo";
-import { NetworkView, NetworkPresenter } from '../../presenter/NetworkPresenter';
-import { PostStatusPresenter, PostView } from "../../presenter/PostStatusPresenter";
+
+import { NetworkView, PostView } from "../../presenter/Presenter";
+import { NetworkPresenter } from "../../presenter/NetworkPresenter";
+import { PostStatusPresenter } from "../../presenter/PostStatusPresenter";
 import { LogoutPresenter } from "../../presenter/LogoutPresenter";
 
 const MainLayout = () => {

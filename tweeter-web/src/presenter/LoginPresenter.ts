@@ -15,17 +15,13 @@ export class LoginPresenter extends AccountPresenter {
 
     this.doTryOperation(async () => {
       this.view.setIsLoading(true);
-
       const [user, authToken] = await this.userService.login(alias,password);
-
       this.view.updateUserInfo(user, user, authToken, rememberMe);
 
       if (!!originalUrl) {
         this.view.navigate(originalUrl);
       }
-
       this.view.navigate("/");
-
     },"login user");
   };
 }

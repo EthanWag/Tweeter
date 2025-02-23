@@ -1,15 +1,18 @@
-import {Status,FakeData} from "tweeter-shared";
+import {Status} from "tweeter-shared";
 import {Link} from "react-router-dom";
 import Post from "./Post";
+import useUserNavigation from "../hooks/useUserNavigation";
 
 
 interface Props {
   index: number,
   item: Status,
-  navigateToUser: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
 }
 
-const StatusItem: React.FC<Props> = ({index,item,navigateToUser}) => {
+const StatusItem: React.FC<Props> = ({index,item}) => {
+
+  const {navigateToUser} = useUserNavigation();
+
   return (
     <>
       <div
