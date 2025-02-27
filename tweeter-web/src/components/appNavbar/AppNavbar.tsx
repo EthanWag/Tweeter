@@ -4,8 +4,9 @@ import { NavLink, useLocation } from "react-router-dom";
 import Image from "react-bootstrap/Image";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfo from "../hooks/useUserInfo";
-import { LogoutPresenter, LogoutView } from "../../presenter/LogoutPresenter";
+import { LogoutPresenter } from "../../presenter/LogoutPresenter";
 import { useState } from "react";
+import { LogoutView } from "../../presenter/Presenter";
 
 interface Props {
   presenterGenerator: (view: LogoutView) => LogoutPresenter; 
@@ -67,7 +68,7 @@ const AppNavbar = (props:Props) => {
               <NavLink to="/followers">Followers</NavLink>
             </Nav.Item>
             <Nav.Item>
-              <NavLink id="logout" onClick={() => presenter.logOut(authToken)} to={location.pathname}>
+              <NavLink id="logout" onClick={() => presenter.logout(authToken)} to={location.pathname}>
                 Logout
               </NavLink>
             </Nav.Item>

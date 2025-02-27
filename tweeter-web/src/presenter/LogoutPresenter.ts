@@ -11,9 +11,9 @@ export class LogoutPresenter extends Presenter<LogoutView>{
     this.userService = new UserService();
   }
 
-  public async logOut(authToken : AuthToken | null){
+  public async logout(authToken : AuthToken | null){
     this.doTryOperation(async () => {
-      this.view.displayInfoMessage("Logging Out...", 0);
+      this.view.displayInfoMessage("Logging out...", 0);
       await this.userService.logout(authToken!);
       this.view.clearLastInfoMessage();
       this.view.clearUserInfo();

@@ -1,6 +1,6 @@
 import { AuthToken , User } from "tweeter-shared";
 import { FollowService } from "../model/service/FollowService";
-import { NetworkView, Presenter , View} from "./Presenter";
+import { NetworkView, Presenter } from "./Presenter";
 
 export class NetworkPresenter extends Presenter<NetworkView>{
 
