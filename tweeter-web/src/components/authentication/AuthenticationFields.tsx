@@ -18,6 +18,7 @@ const AuthenticationFields: React.FC<Props> = ({onEvent, setAlias, setPassword})
                 className="form-control"
                 size={50}
                 id="aliasInput"
+                aria-label="alias"
                 placeholder="name@example.com"
                 onKeyDown={onEvent}
                 onChange={(event) => setAlias(event.target.value)}
@@ -29,6 +30,7 @@ const AuthenticationFields: React.FC<Props> = ({onEvent, setAlias, setPassword})
                 type="password"
                 className="form-control bottom"
                 id="passwordInput"
+                aria-label="password"
                 placeholder="Password"
                 onKeyDown={onEvent}
                 onChange={(event) => setPassword(event.target.value)}

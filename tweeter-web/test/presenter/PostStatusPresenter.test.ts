@@ -11,7 +11,6 @@ describe("PostStatusPresenter", () => {
     let postStatusPresenter: PostStatusPresenter;
     let mockStatusService: StatusService;
 
-    // incase we need an authtoken
     const authToken = new AuthToken("You a mega hoe", Date.now());
     const myUser = new User("not nathan","not david","booger","not a very good image")
     const post = "Omeaga post"
@@ -73,8 +72,6 @@ describe("PostStatusPresenter", () => {
         verify(mockPostStatusPresenterView.setPost("")).never();
 
         verify(mockPostStatusPresenterView.clearLastInfoMessage()).once();
-
-
     });
 
 });
