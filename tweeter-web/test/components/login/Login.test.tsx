@@ -70,28 +70,20 @@ describe("Login Component", () => {
 });
 
 
-const renderLogin = (originalUrl : string, presenterGenerator: (view: AccountView) => LoginPresenter) => {
+const renderLogin = (originalUrl : string) => {
     // we need a prop here because we also need a generator
 
     return render(
         <MemoryRouter>
-            <Login 
-                originalUrl={location.pathname}
-            />
+            <Login originalUrl={originalUrl}/>
         </MemoryRouter>
     );
 };
 
-const renderLoginAndGetElement = (orignalUrl : string, presenterGenerator?: (view: AccountView) => LoginPresenter) => {
+const renderLoginAndGetElement = (orignalUrl : string) => {
     const user = userEvent.setup();
 
-    if (!presenterGenerator) { // just make a mock if we don't really care about the presenter
-
-        presenterGenerator = (view: AccountView) => new LoginPresenter(view);
-
-    }
-
-    renderLogin(orignalUrl, presenterGenerator);
+    renderLogin(orignalUrl);
 
     const signInButton = screen.getByRole("button",{ name: /Sign in/i });
     const aliasField = screen.getByLabelText("alias");

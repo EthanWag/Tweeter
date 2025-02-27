@@ -11,7 +11,7 @@ import { AccountView } from "../../../presenter/Presenter";
 
 interface Props {
   originalUrl?: string;
-  presenterGenerator: (view: AccountView) => LoginPresenter; 
+  // presenterGenerator: (view: AccountView) => LoginPresenter; 
 }
 
 const Login = (props: Props) => {
@@ -31,7 +31,7 @@ const Login = (props: Props) => {
     navigate: navigate
   }
 
-  const [presenter] = useState(props.presenterGenerator(listener));
+  const [presenter] = useState(new LoginPresenter(listener));
   
   const loginOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
     if (event.key == "Enter" && !presenter.checkSubmitButtonStatus(alias, password)){
