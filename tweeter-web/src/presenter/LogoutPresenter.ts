@@ -4,11 +4,21 @@ import { LogoutView, Presenter } from "./Presenter";
 
 export class LogoutPresenter extends Presenter<LogoutView>{
 
-  private userService : UserService;
+  private _userService : UserService | null = null;
 
   public constructor(view: LogoutView) {
     super(view)
-    this.userService = new UserService();
+  }
+
+  public get userService() {
+    if (this._userService === null) {
+      this._userService = new UserService();
+    }
+    return this._userService;
+  }
+
+  public get view() {
+    return super.view as LogoutView;
   }
 
   public async logout(authToken : AuthToken | null){
