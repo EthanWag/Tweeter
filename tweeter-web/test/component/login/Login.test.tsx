@@ -11,7 +11,7 @@ describe("Login Component", () => {
 
     });
 });
-
+/*
 const renderComponent = () => {
     return render(
 
@@ -21,3 +21,4 @@ const renderComponent = () => {
 
     );
 }
+*/

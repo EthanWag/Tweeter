@@ -6,15 +6,23 @@ import { PostView, Presenter } from './Presenter';
 
 export class PostStatusPresenter extends Presenter<PostView> {
 
-    private statusService: StatusService;
+    private _statusService: StatusService | null = null;
 
     public constructor(view: PostView) {
         super(view);
-        this.statusService = new StatusService();
     }
 
-    public async submitPost(event: React.MouseEvent, post: string, currentUser: User, authToken: AuthToken) {
-        event.preventDefault();
+    public get statusService() {
+        if(this._statusService === null) {
+            this._statusService = new StatusService();
+        }
+        return this._statusService;
+    }
+
+    public async submitPost(event: React.MouseEvent | null, post: string, currentUser: User, authToken: AuthToken) {
+        if(event){
+                    event.preventDefault();
+        }
         
         this.doUpdateOperation(async () => {
             this.view.displayInfoMessage("Posting status...", 0);

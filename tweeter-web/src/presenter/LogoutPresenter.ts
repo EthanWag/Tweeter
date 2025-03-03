@@ -4,16 +4,22 @@ import { LogoutView, Presenter } from "./Presenter";
 
 export class LogoutPresenter extends Presenter<LogoutView>{
 
-  private userService : UserService;
+  private _userService : UserService | null = null;
 
   public constructor(view: LogoutView) {
-    super(view)
-    this.userService = new UserService();
+    super(view);
   }
 
-  public async logOut(authToken : AuthToken | null){
+  public get userService() : UserService {
+    if(this._userService === null){
+      this._userService = new UserService();
+    }
+    return this._userService;
+  }
+
+  public async logout(authToken : AuthToken | null){
     this.doTryOperation(async () => {
-      this.view.displayInfoMessage("Logging Out...", 0);
+      this.view.displayInfoMessage("Logging out...", 0);
       await this.userService.logout(authToken!);
       this.view.clearLastInfoMessage();
       this.view.clearUserInfo();

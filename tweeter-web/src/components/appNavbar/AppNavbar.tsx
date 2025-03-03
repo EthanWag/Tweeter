@@ -68,7 +68,7 @@ const AppNavbar = (props:Props) => {
               <NavLink to="/followers">Followers</NavLink>
             </Nav.Item>
             <Nav.Item>
-              <NavLink id="logout" onClick={() => presenter.logOut(authToken)} to={location.pathname}>
+              <NavLink id="logout" onClick={() => presenter.logout(authToken)} to={location.pathname}>
                 Logout
               </NavLink>
             </Nav.Item>
