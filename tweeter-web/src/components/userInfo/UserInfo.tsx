@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfo from "../hooks/useUserInfo";
-import { NetworkPresenter, NetworkView } from "../../presenter/NetworkPresenter";
+import { NetworkPresenter } from "../../presenter/NetworkPresenter";
+import { NetworkView } from "../../presenter/Presenter";
 
 interface Props {
   presenterGenerator: (view: NetworkView) => NetworkPresenter;

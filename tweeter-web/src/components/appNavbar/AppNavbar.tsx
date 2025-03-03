@@ -4,8 +4,9 @@ import { NavLink, useLocation } from "react-router-dom";
 import Image from "react-bootstrap/Image";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfo from "../hooks/useUserInfo";
-import { LogoutPresenter, LogoutView } from "../../presenter/LogoutPresenter";
+import { LogoutPresenter } from "../../presenter/LogoutPresenter";
 import { useState } from "react";
+import { LogoutView } from "../../presenter/Presenter";
 
 interface Props {
   presenterGenerator: (view: LogoutView) => LogoutPresenter; 

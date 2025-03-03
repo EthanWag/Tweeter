@@ -6,7 +6,7 @@ export abstract class AccountPresenter extends Presenter<AccountView>{
         super(view);
     }
 
-    protected checkSubmitButtonStatus(...values: string[]): boolean {
+    public checkSubmitButtonStatus(...values: string[]): boolean {
         return values.some(value => !value);
     }
 }

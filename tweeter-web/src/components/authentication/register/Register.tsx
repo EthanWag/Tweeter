@@ -7,7 +7,7 @@ import useToastListener from "../../toaster/ToastListenerHook";
 import AuthenticationFields from "../AuthenticationFields";
 import useUserInfo from "../../hooks/useUserInfo";
 import { RegisterPresenter } from "../../../presenter/RegisterPresenter";
-import { AccountView } from "../../../presenter/AccountPresenter";
+import { AccountView } from "../../../presenter/Presenter";
 
 interface Props {
   presenterGenerator: (view: AccountView) => RegisterPresenter;

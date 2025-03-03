@@ -7,7 +7,7 @@ import useToastListener from "../../toaster/ToastListenerHook";
 import AuthenticationFields from "../AuthenticationFields";
 import useUserInfo from "../../hooks/useUserInfo";
 import { LoginPresenter } from "../../../presenter/LoginPresenter";
-import { AccountView } from "../../../presenter/AccountPresenter";
+import { AccountView } from "../../../presenter/Presenter";
 
 interface Props {
   originalUrl?: string;
@@ -34,6 +34,7 @@ const Login = (props: Props) => {
   const [presenter] = useState(props.presenterGenerator(listener));
   
   const loginOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
+
     if (event.key == "Enter" && !presenter.checkSubmitButtonStatus(alias, password)){
       presenter.doLogin( alias, password, rememberMe, props.originalUrl);
     }

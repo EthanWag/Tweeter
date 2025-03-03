@@ -1,3 +1,4 @@
+import { JSX } from "react";
 import OAuth from "./OAuth";
 
 interface Props {
