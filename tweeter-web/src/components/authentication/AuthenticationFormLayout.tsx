@@ -1,5 +1,6 @@
 import { JSX } from "react";
 import OAuth from "./OAuth";
+import React from "react";
 
 interface Props {
   headingText: string;

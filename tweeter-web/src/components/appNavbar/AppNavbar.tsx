@@ -7,6 +7,7 @@ import useUserInfo from "../hooks/useUserInfo";
 import { LogoutPresenter } from "../../presenter/LogoutPresenter";
 import { useState } from "react";
 import { LogoutView } from "../../presenter/Presenter";
+import React from "react";
 
 interface Props {
   presenterGenerator: (view: LogoutView) => LogoutPresenter; 

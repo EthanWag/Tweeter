@@ -7,18 +7,14 @@ export class LogoutPresenter extends Presenter<LogoutView>{
   private _userService : UserService | null = null;
 
   public constructor(view: LogoutView) {
-    super(view)
+    super(view);
   }
 
-  public get userService() {
-    if (this._userService === null) {
+  public get userService() : UserService {
+    if(this._userService === null){
       this._userService = new UserService();
     }
     return this._userService;
-  }
-
-  public get view() {
-    return super.view as LogoutView;
   }
 
   public async logout(authToken : AuthToken | null){
