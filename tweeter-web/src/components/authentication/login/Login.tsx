@@ -13,7 +13,7 @@ import useUserInfo from "../../hooks/useUserInfo";
 
 interface Props {
   originalUrl?: string;
-  presenterGenerator: (view: AccountView) => LoginPresenter; 
+  presenter? : LoginPresenter;
 }
 
 const Login = (props: Props) => {
@@ -33,7 +33,7 @@ const Login = (props: Props) => {
     navigate: navigate
   }
 
-  const [presenter] = useState(props.presenterGenerator(listener));
+  const [presenter] = useState(props.presenter ? props.presenter : new LoginPresenter(listener));
   
   const loginOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
 
