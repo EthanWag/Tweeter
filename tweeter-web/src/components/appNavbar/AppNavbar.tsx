@@ -1,33 +1,37 @@
 import "./AppNavbar.css";
+import { useContext } from "react";
+import { UserInfoContext } from "../userInfo/UserInfoProvider";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { NavLink, useLocation } from "react-router-dom";
 import Image from "react-bootstrap/Image";
+import { AuthToken } from "tweeter-shared";
 import useToastListener from "../toaster/ToastListenerHook";
-import useUserInfo from "../hooks/useUserInfo";
-import { LogoutPresenter } from "../../presenter/LogoutPresenter";
-import { useState } from "react";
-import { LogoutView } from "../../presenter/Presenter";
 
-interface Props {
-  presenterGenerator: (view: LogoutView) => LogoutPresenter; 
-}
-
-const AppNavbar = (props:Props) => {
+const AppNavbar = () => {
   const location = useLocation();
-  const { authToken, clearUserInfo } = useUserInfo();
+  const { authToken, clearUserInfo } = useContext(UserInfoContext);
   const { displayInfoMessage, displayErrorMessage, clearLastInfoMessage } =
     useToastListener();
 
-  //const navigationItems = useNavigateHook();
+  const logOut = async () => {
+    displayInfoMessage("Logging Out...", 0);
 
-  const listener: LogoutView = {
-    displayErrorMessage: displayErrorMessage,
-    displayInfoMessage: displayInfoMessage,
-    clearUserInfo: clearUserInfo,
-    clearLastInfoMessage: clearLastInfoMessage,
+    try {
+      await logout(authToken!);
+
+      clearLastInfoMessage();
+      clearUserInfo();
+    } catch (error) {
+      displayErrorMessage(
+        `Failed to log user out because of exception: ${error}`
+      );
+    }
   };
 
-  const [presenter] = useState(props.presenterGenerator(listener));
+  const logout = async (authToken: AuthToken): Promise<void> => {
+    // Pause so we can see the logging out message. Delete when the call to the server is implemented.
+    await new Promise((res) => setTimeout(res, 1000));
+  };
 
   return (
     <Navbar
@@ -53,7 +57,7 @@ const AppNavbar = (props:Props) => {
           </div>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav"> 
+        <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="ml-auto">
             <Nav.Item>
               <NavLink to="/feed">Feed</NavLink>
@@ -68,7 +72,7 @@ const AppNavbar = (props:Props) => {
               <NavLink to="/followers">Followers</NavLink>
             </Nav.Item>
             <Nav.Item>
-              <NavLink id="logout" onClick={() => presenter.logOut(authToken)} to={location.pathname}>
+              <NavLink id="logout" onClick={logOut} to={location.pathname}>
                 Logout
               </NavLink>
             </Nav.Item>

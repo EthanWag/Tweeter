@@ -1,4 +1,6 @@
 import "./App.css";
+import { useContext } from "react";
+import { UserInfoContext } from "./components/userInfo/UserInfoProvider";
 import {
   BrowserRouter,
   Navigate,
@@ -10,25 +12,13 @@ import Login from "./components/authentication/login/Login";
 import Register from "./components/authentication/register/Register";
 import MainLayout from "./components/mainLayout/MainLayout";
 import Toaster from "./components/toaster/Toaster";
-import useUserInfo from "./components/hooks/useUserInfo";
-import { FolloweePresenter} from './presenter/FolloweePresenter';
-import { FollowerPresenter } from "./presenter/FollowerPresenter";
-import { FeedPresenter } from "./presenter/FeedPresenter";
-import { StoryPresenter } from "./presenter/StoryPresenter";
-import { LoginPresenter } from "./presenter/LoginPresenter";
-import { RegisterPresenter } from './presenter/RegisterPresenter';
-import ItemScroller from "./components/mainLayout/ItemScroller";
-import { Status, User } from "tweeter-shared";
-import { AccountView, PagedItemView } from "./presenter/Presenter";
-import { PagedItemPresenter } from "./presenter/PagedItemPresenter";
-import { StatusService } from "./model/service/StatusService";
-import StatusItem from "./components/statusItem/StatusItem";
-import UserItem from "./components/userItem/UserItem";
-import { FollowService } from "./model/service/FollowService";
-import { JSX } from "react";
+import FeedScroller from "./components/mainLayout/FeedScroller";
+import StoryScroller from "./components/mainLayout/StoryScroller";
+import { AuthToken, User, FakeData } from "tweeter-shared";
+import UserItemScroller from "./components/mainLayout/UserItemScroller";
 
 const App = () => {
-  const { currentUser, authToken } = useUserInfo();
+  const { currentUser, authToken } = useContext(UserInfoContext);
 
   const isAuthenticated = (): boolean => {
     return !!currentUser && !!authToken;
@@ -49,55 +39,50 @@ const App = () => {
 };
 
 const AuthenticatedRoutes = () => {
+  const loadMoreFollowers = async (
+    authToken: AuthToken,
+    userAlias: string,
+    pageSize: number,
+    lastItem: User | null
+  ): Promise<[User[], boolean]> => {
+    // TODO: Replace with the result of calling server
+    return FakeData.instance.getPageOfUsers(lastItem, pageSize, userAlias);
+  };
+
+  const loadMoreFollowees = async (
+    authToken: AuthToken,
+    userAlias: string,
+    pageSize: number,
+    lastItem: User | null
+  ): Promise<[User[], boolean]> => {
+    // TODO: Replace with the result of calling server
+    return FakeData.instance.getPageOfUsers(lastItem, pageSize, userAlias);
+  };
+
   return (
     <Routes>
       <Route element={<MainLayout />}>
         <Route index element={<Navigate to="/feed" />} />
-
-        <Route
-          path="feed"
-          element={
-            <ItemScroller<Status,PagedItemView<Status>,StatusService,PagedItemPresenter<Status,StatusService>>
-              key={1}
-              presenterGenerator={(view: PagedItemView<Status>) => new FeedPresenter(view)} 
-              itemGenerator={function (index: number, item: Status): JSX.Element {
-                return <StatusItem index={index} item={item}/>;
-            }}/>
-          }
-        />
-
-      <Route
-        path="story"
-        element={
-          <ItemScroller<Status,PagedItemView<Status>,StatusService,PagedItemPresenter<Status,StatusService>>
-            key={2}
-            presenterGenerator={(view: PagedItemView<Status>) => new StoryPresenter(view)} 
-            itemGenerator={function (index: number, item: Status): JSX.Element {
-              return <StatusItem index={index} item={item}/>;
-          }}/>
-        }
-      />
-        
+        <Route path="feed" element={<FeedScroller />} />
+        <Route path="story" element={<StoryScroller />} />
         <Route
           path="followees"
           element={
-            <ItemScroller<User,PagedItemView<User>,FollowService,PagedItemPresenter<User,FollowService>>
-              key={3}
-              presenterGenerator={(view: PagedItemView<User>) => new FolloweePresenter(view)} 
-              itemGenerator={function (index: number, item: User): JSX.Element {
-                return <UserItem index={index} value={item}/>;
-            }}/>
+            <UserItemScroller
+              key={1}
+              loadItems={loadMoreFollowees}
+                itemDescription="followees"
+            />
           }
         />
         <Route
           path="followers"
           element={
-            <ItemScroller<User,PagedItemView<User>,FollowService,PagedItemPresenter<User,FollowService>>
-              key={3}
-              presenterGenerator={(view: PagedItemView<User>) => new FollowerPresenter(view)} 
-              itemGenerator={function (index: number, item: User): JSX.Element {
-                return <UserItem index={index} value={item}/>;
-            }}/>
+            <UserItemScroller
+              key={2} 
+              loadItems={loadMoreFollowers}
+                itemDescription="followers"
+            />
           }
         />
         <Route path="logout" element={<Navigate to="/login" />} />
@@ -110,16 +95,11 @@ const AuthenticatedRoutes = () => {
 const UnauthenticatedRoutes = () => {
   const location = useLocation();
 
-
-  // the little red squiggles are because it wants login, alise and others, which we don't have yet ...
   return (
     <Routes>
-      <Route path="/login" element={<Login presenterGenerator={(view: AccountView) => new LoginPresenter(view)}/>}/>
-      <Route path="/register" element={<Register presenterGenerator={(view: AccountView) => new RegisterPresenter(view)}/>}/>
-      <Route path="*" element={<Login 
-      presenterGenerator={(view: AccountView) => new LoginPresenter(view)}
-      originalUrl={location.pathname}
-      />}/>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="*" element={<Login originalUrl={location.pathname} />} />
     </Routes>
   );
 };
