@@ -13,9 +13,11 @@ export type{ UserDto } from "./model/dto/UserDto";
 
 
 // request classes
+export type { TweeterRequest } from "./model/net/request/TweeterRequest";
 export type { PagedUserItemRequest } from "./model/net/request/PagedUserItemRequest";
 
 // response classes
+export type { TweeterResponse } from "./model/net/response/TweeterResponse";
 export type { PagedUserItemResponse } from "./model/net/response/PagedUserItemResponse";
 
 // Take data for testing
