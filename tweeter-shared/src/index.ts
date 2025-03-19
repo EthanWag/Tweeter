@@ -8,5 +8,15 @@ export { AuthToken } from "./model/domain/AuthToken";
 // uploading to lambda. Instead we have to list each export.
 
 
-// 
+// dto classes
+export type{ UserDto } from "./model/dto/UserDto";
+
+
+// request classes
+export type { PagedUserItemRequest } from "./model/net/request/PagedUserItemRequest";
+
+// response classes
+export type { PagedUserItemResponse } from "./model/net/response/PagedUserItemResponse";
+
+// Take data for testing
 export { FakeData } from "./util/FakeData";
