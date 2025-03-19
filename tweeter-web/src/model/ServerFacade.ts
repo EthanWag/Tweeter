@@ -7,7 +7,7 @@ import {
   import { ClientCommunicator } from "./network/ClientCommunicator";
   
   export class ServerFacade {
-    private SERVER_URL = "TODO: Set this value.";
+    private SERVER_URL = "TODO: Set this value."; // ask about this a bit, seems like a security risk and it's might not remain the same
   
     private clientCommunicator = new ClientCommunicator(this.SERVER_URL);
   
@@ -34,7 +34,7 @@ import {
         }
       } else {
         console.error(response);
-        throw new Error(response.message);
+        throw new Error(response.message ?? "An unknown error occurred");
       }
     }
   }
