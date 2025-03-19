@@ -22,22 +22,9 @@ export class FollowService {
   };
 
   private async getFakeData(lastItem: UserDto | null, pageSize: number, userAlias: string): Promise<[UserDto[], boolean]> {
-    const [items, hasMore] = FakeData.instance.getPageOfUsers(this.getDomainObject(lastItem), pageSize, userAlias);
-    const dtos = items.map((user) => this.createDto(user));
+    const [items, hasMore] = FakeData.instance.getPageOfUsers(User.fromDto(lastItem), pageSize, userAlias);
+    const dtos = items.map((user) => user.dto);
     return [dtos, hasMore];
-  }
-
-  private createDto(user: User) : UserDto {
-    return {
-      firstname: user.firstName,
-      lastname: user.lastName,
-      alias: user.alias,
-      imageUrl: user.imageUrl
-    }
-  }
-
-  private getDomainObject(dto: UserDto | null): User | null {
-     return dto == null ? null : new User(dto.firstname, dto.lastname, dto.alias, dto.imageUrl);
   }
 
   public async getIsFollowerStatus(authToken: AuthToken, user: User, selectedUser: User): Promise<boolean> {
