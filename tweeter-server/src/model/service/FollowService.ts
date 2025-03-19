@@ -6,9 +6,9 @@ export class FollowService {
     userAlias: string,
     pageSize: number,
     lastItem: UserDto | null
-  ): Promise<[User[], boolean]> {
+  ): Promise<[UserDto[], boolean]> {
     // TODO: Replace with the result of calling server
-    return FakeData.instance.getPageOfUsers(this.getDomainObject(lastItem), pageSize, userAlias);
+    return this.getFakeData(lastItem, pageSize, userAlias)
   };
   
   public async loadMoreFollowees (
@@ -18,10 +18,14 @@ export class FollowService {
     lastItem: UserDto | null
   ): Promise<[UserDto[], boolean]> {
     // TODO: Replace with the result of calling server
-    const [items,hasMore] = FakeData.instance.getPageOfUsers(this.getDomainObject(lastItem), pageSize, userAlias);
+    return this.getFakeData(lastItem, pageSize, userAlias);
+  };
+
+  private async getFakeData(lastItem: UserDto | null, pageSize: number, userAlias: string): Promise<[UserDto[], boolean]> {
+    const [items, hasMore] = FakeData.instance.getPageOfUsers(this.getDomainObject(lastItem), pageSize, userAlias);
     const dtos = items.map((user) => this.createDto(user));
     return [dtos, hasMore];
-  };
+  }
 
   private createDto(user: User) : UserDto {
     return {
