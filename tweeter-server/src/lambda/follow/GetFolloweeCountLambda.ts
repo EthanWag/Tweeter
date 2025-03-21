@@ -1,15 +1,23 @@
-import { CountFollowRequest, PagedUserItemResponse } from "tweeter-shared";
+import { CountFollowRequest, CountResponse, User} from "tweeter-shared";
 import { FollowService } from "../../model/service/FollowService";
+import { notNull } from 'tweeter-shared';
 
-export const handler = async (request:CountFollowRequest): Promise<PagedUserItemResponse> => {
+export const handler = async (request:CountFollowRequest): Promise<CountResponse> => {
+
+    if(notNull(request.user)) {
+        return {
+            success: false,
+            message: null,
+            count: 0
+        }
+    }
 
     const followService = new FollowService();
-    const [items, hasMore] = await followService.getFolloweeCount(request.token, request.user);
+    const numFollowees = await followService.getFolloweeCount(request.token, User.fromDto(request.user)!); // turned this off because we checked to see if it is not null
 
     return {
         success: true,
         message: null,
-        items: items,
-        hasMore: hasMore
+        count: numFollowees
     }
 }
