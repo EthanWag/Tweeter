@@ -1,5 +1,5 @@
-import { User } from '../../domain/User';
+import { UserDto } from '../../dto/UserDto';
 import { CountItemRequest } from './CountItemRequest';
 
-export interface CountFollowRequest extends CountItemRequest<User> {
+export interface CountFollowRequest extends CountItemRequest<UserDto> {
 }
