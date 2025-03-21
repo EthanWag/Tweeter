@@ -1,6 +1,5 @@
 import { UserDto } from "../../dto/UserDto"
-import { TweeterRequest } from "./TweeterRequest"
+import { PagedItemRequest } from "./PagedItemRequest"
 
-export interface PagedUserItemRequest extends TweeterRequest {
-    readonly lastItem: UserDto | null
+export interface PagedUserItemRequest extends PagedItemRequest<UserDto>{
 }
