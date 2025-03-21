@@ -1,4 +1,4 @@
-import { AuthToken, User, FakeData, PagedUserItemRequest, UserDto } from "tweeter-shared";
+import { AuthToken, User, FakeData, PagedUserItemRequest, UserDto, CountFollowRequest, isNull } from "tweeter-shared";
 import { ServerFacade } from "../ServerFacade";
 
 export class FollowService {
@@ -9,7 +9,7 @@ export class FollowService {
     lastItem: User | null
   ): Promise<[User[], boolean]> {
     let facade = new ServerFacade();
-    return facade.getMoreFollowers(this.followeesRequestBuilder(authToken, userAlias, pageSize, lastItem));
+    return facade.getMoreFollowers(this.followRequestBuilder(authToken, userAlias, pageSize, lastItem));
   };
 
 public async loadMoreFollowees (
@@ -19,20 +19,31 @@ public async loadMoreFollowees (
   lastItem: User | null
 ): Promise<[User[], boolean]> {
   let facade = new ServerFacade(); // I don't know if I like this
-  return facade.getMoreFollowees(this.followeesRequestBuilder(authToken, userAlias, pageSize, lastItem));
+  return facade.getMoreFollowees(this.followRequestBuilder(authToken, userAlias, pageSize, lastItem));
 };
 
 // nice clean functions
 // =============================================================================================================
 
 // this can be made a generic function, for now though it works for the followees
-private followeesRequestBuilder(authToken: AuthToken, userAlias: string,pageSize: number, lastItem: User | null): PagedUserItemRequest {
+private followRequestBuilder(authToken: AuthToken, userAlias: string,pageSize: number, lastItem: User | null): PagedUserItemRequest {
 
   return {
     token: authToken.token,
     userAlias: userAlias,
     pageSize: pageSize,
     lastItem: this.toDto(lastItem)
+  }
+}
+
+private countRequestBuilder(authToken: string, user: User): CountFollowRequest {
+  let myUser = user;
+  if (isNull(user)) {
+    myUser = new User("", "", "", "");
+  }
+  return {
+    token: authToken,
+    user: this.toDto(myUser)!
   }
 }
 
@@ -57,8 +68,13 @@ private toDto(user: User | null): UserDto | null {
   };
 
   public async getFolloweeCount(token: string,user: User): Promise<number> {
-    // TODO: Replace with the result of calling server
-    return FakeData.instance.getFolloweeCount(user.alias);
+    const facade = new ServerFacade();
+
+    let test = this.countRequestBuilder(token, user);
+
+    console.log(test);
+
+    return facade.getFolloweeCount(test);
   };
 
   public async getFollowerCount(token: string,user: User): Promise<number>{

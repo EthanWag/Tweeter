@@ -19,6 +19,7 @@ export class ClientCommunicator {
         "Content-type": "application/json",
       });
     }
+    console.log(req);
 
     console.log(`The request body is '${JSON.stringify(req)}'`);
 

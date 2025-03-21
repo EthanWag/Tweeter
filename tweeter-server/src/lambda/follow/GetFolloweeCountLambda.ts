@@ -1,13 +1,12 @@
-import { CountFollowRequest, CountResponse, User} from "tweeter-shared";
+import { CountFollowRequest, CountResponse, User, isNull} from "tweeter-shared";
 import { FollowService } from "../../model/service/FollowService";
-import { notNull } from 'tweeter-shared';
 
 export const handler = async (request:CountFollowRequest): Promise<CountResponse> => {
 
-    if(notNull(request.user)) {
+    if(isNull(request.user)) {
         return {
             success: false,
-            message: null,
+            message: "invalid user",
             count: 0
         }
     }
