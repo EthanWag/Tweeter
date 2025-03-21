@@ -1,10 +1,6 @@
 import { UserDto } from "../../dto/UserDto"
+import { TweeterRequest } from "./TweeterRequest"
 
-export interface PagedUserItemRequest {
-
-    readonly token: string,
-    readonly userAlias: string,
-    readonly pageSize: number,
+export interface PagedUserItemRequest extends TweeterRequest {
     readonly lastItem: UserDto | null
-
 }

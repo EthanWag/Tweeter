@@ -1,3 +1,4 @@
+import { StatusDto } from "../dto/StatusDto";
 import { PostSegment, Type } from "./PostSegment";
 import { User } from "./User";
 import { format } from "date-fns";
@@ -274,4 +275,37 @@ export class Status {
   public toJson(): string {
     return JSON.stringify(this);
   }
+
+  public get dto (): StatusDto {
+    
+    return {
+      post: this._post,
+      user: this._user.dto,
+      timestamp: this._timestamp,
+    };
+  }
+
+  public static fromDto(dto: StatusDto | null): Status | null {
+
+    if (!!dto) {
+
+      // some simple logic incase the user passed in from the dto is null, it can't be null
+      // is somehow the user is null it will just make an empty user
+      let user : User;
+      if(dto.user != null && dto.user != undefined){
+        user = User.fromDto(dto.user)!;
+      }else{
+        user = new User("","","","");
+      }
+
+      return new Status(
+        dto.post,
+        user,
+        dto.timestamp,
+      );
+    }
+
+    return null;
+  }
+    
 }

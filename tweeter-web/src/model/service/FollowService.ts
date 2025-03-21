@@ -8,20 +8,9 @@ export class FollowService {
     pageSize: number,
     lastItem: User | null
   ): Promise<[User[], boolean]> {
-    // TODO: Replace with the result of calling server
-    return FakeData.instance.getPageOfUsers(lastItem, pageSize, userAlias);
+    let facade = new ServerFacade();
+    return facade.getMoreFollowers(this.followeesRequestBuilder(authToken, userAlias, pageSize, lastItem));
   };
-  /*
-  public async loadMoreFollowees (
-    authToken: AuthToken,
-    userAlias: string,
-    pageSize: number,
-    lastItem: User | null
-  ): Promise<[User[], boolean]> {
-    // TODO: Replace with the result of calling server
-    return FakeData.instance.getPageOfUsers(lastItem, pageSize, userAlias);
-  };
-*/
 
 public async loadMoreFollowees ( // UNTESTED CODE, TEST IT TO MAKE SURE IT MAKE THE RIGHT REQUEST
   authToken: AuthToken,

@@ -1,3 +1,5 @@
 export interface TweeterRequest {
-    // TODO: cum
+    readonly token: string,
+    readonly userAlias: string,
+    readonly pageSize: number,
 }
