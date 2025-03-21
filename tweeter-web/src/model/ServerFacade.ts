@@ -9,12 +9,14 @@ import {
     User,
     UserDto,
     StatusDto,
+    CountFollowRequest,
     CountResponse,
+    IsFollowRequest,
+    PagedItemRequest,
+    PagedItemResponse,
+    IsValidResponse
   } from "tweeter-shared";
   import { ClientCommunicator } from "./network/ClientCommunicator";
-import { PagedItemRequest } from "tweeter-shared/dist/model/net/request/PagedItemRequest";
-import { PagedItemResponse } from "tweeter-shared/dist/model/net/response/PagedItemResponse";
-import { CountFollowRequest } from '../../../tweeter-shared/dist/model/net/request/CountFollowRequest';
   
   export class ServerFacade {
     private SERVER_URL = "https://799n9hdm1i.execute-api.us-east-1.amazonaws.com/dev"; // ask about this a bit, seems like a security risk and it's might not remain the same
@@ -112,6 +114,19 @@ import { CountFollowRequest } from '../../../tweeter-shared/dist/model/net/reque
           "/follower/count"
         )
         return response.count;
+      }catch(error){
+          console.error(error);
+          throw error;
+      }
+    }
+
+    public async AskIfFollower(request:IsFollowRequest): Promise<boolean>{
+      try{
+        const response = await this.callServer<IsFollowRequest,IsValidResponse>(
+          request,
+          "/follower/check"
+        )
+        return response.valid;
       }catch(error){
           console.error(error);
           throw error;

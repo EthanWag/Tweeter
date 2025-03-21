@@ -1,4 +1,4 @@
-import { AuthToken, User, FakeData, PagedUserItemRequest, UserDto, CountFollowRequest, isNull } from "tweeter-shared";
+import { AuthToken, User, FakeData, PagedUserItemRequest, UserDto, CountFollowRequest, isNull, IsFollowRequest } from "tweeter-shared";
 import { ServerFacade } from "../ServerFacade";
 
 export class FollowService {
@@ -18,7 +18,7 @@ public async loadMoreFollowees (
   pageSize: number,
   lastItem: User | null
 ): Promise<[User[], boolean]> {
-  let facade = new ServerFacade(); // I don't know if I like this
+  let facade = new ServerFacade();
   return facade.getMoreFollowees(this.followRequestBuilder(authToken, userAlias, pageSize, lastItem));
 };
 
@@ -47,6 +47,23 @@ private countRequestBuilder(authToken: string, user: User): CountFollowRequest {
   }
 }
 
+private askRequestBuilder(authToken: string, user: User, selectedUser: User): IsFollowRequest {
+
+  // redundent
+  if (isNull(user)) {
+    user = new User("", "", "", "");
+  }
+  if (isNull(selectedUser)) {
+    selectedUser = new User("", "", "", "");
+  }
+
+  return {
+    token: authToken,
+    user: this.toDto(user)!,
+    selectedUser: this.toDto(selectedUser)!
+  }
+}
+
 // same here to, this could be made into a generic function
 private toDto(user: User | null): UserDto | null {
 
@@ -63,8 +80,8 @@ private toDto(user: User | null): UserDto | null {
   // btw, these are going to all be strings 
 
   public async getIsFollowerStatus(token: string, user: User, selectedUser: User): Promise<boolean> {
-    // TODO: Replace with the result of calling server
-    return FakeData.instance.isFollower();
+    const facade = new ServerFacade();
+    return facade.AskIfFollower(this.askRequestBuilder(token, user, selectedUser));
   };
 
   public async getFolloweeCount(token: string,user: User): Promise<number> {
