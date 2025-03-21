@@ -1,6 +1,5 @@
-import { AuthToken, FakeData, PagedStatusItemRequest, Status, StatusDto } from "tweeter-shared";
+import { AuthToken, PagedStatusItemRequest, Status, StatusDto } from "tweeter-shared";
 import { ServerFacade } from "../ServerFacade";
-
 
 export class StatusService {
     public async loadMoreFeedItems (
@@ -10,7 +9,7 @@ export class StatusService {
         lastItem: Status | null
       ): Promise<[Status[], boolean]> {
         let facade = new ServerFacade();
-        return FakeData.instance.getPageOfStatuses(lastItem, pageSize);
+        return facade.getMoreFeedItems(this.followeesRequestBuilder(authToken, alias, pageSize, lastItem));
       }
 
       public async loadMoreStoryItems (

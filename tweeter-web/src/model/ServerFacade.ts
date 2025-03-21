@@ -96,6 +96,32 @@ import {
       }
     }
 
+    public async getMoreFeedItems(
+      request: PagedStatusItemRequest
+    ): Promise<[Status[], boolean]> {
+      const response = await this.callServer<
+        PagedStatusItemRequest,
+        PagedStatusItemResponse
+      >(request, "/feed/list");
+
+      const items: Status[] | null =
+        response.success && response.items
+          ? response.items.map((dto) => Status.fromDto(dto) as Status)
+          : null;
+
+      // Handle errors    
+      if (response.success) {
+        if (items == null) {
+          throw new Error(`Feed unavailable`);
+        } else {
+          return [items, response.hasMore];
+        }
+      } else {
+        console.error(response);
+        throw new Error(response.message ?? "An unknown error occurred");
+      }
+    }
+
 
     private async callServer<T extends TweeterRequest,S extends TweeterResponse>(
         request: T,
