@@ -69,17 +69,12 @@ private toDto(user: User | null): UserDto | null {
 
   public async getFolloweeCount(token: string,user: User): Promise<number> {
     const facade = new ServerFacade();
-
-    let test = this.countRequestBuilder(token, user);
-
-    console.log(test);
-
-    return facade.getFolloweeCount(test);
+    return facade.getFolloweeCount(this.countRequestBuilder(token, user));
   };
 
   public async getFollowerCount(token: string,user: User): Promise<number>{
-    // TODO: Replace with the result of calling server
-    return FakeData.instance.getFollowerCount(user.alias);
+    const facade = new ServerFacade();
+    return facade.getFollowerCount(this.countRequestBuilder(token, user));
   };
 
 

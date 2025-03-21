@@ -105,6 +105,19 @@ import { CountFollowRequest } from '../../../tweeter-shared/dist/model/net/reque
       }
     }
 
+    public async getFollowerCount(request:CountFollowRequest): Promise<number>{
+      try{
+        const response = await this.callServer<CountFollowRequest,CountResponse>(
+          request,
+          "/follower/count"
+        )
+        return response.count;
+      }catch(error){
+          console.error(error);
+          throw error;
+      }
+    }
+
     private async makePagedRequest<D extends UserDto | StatusDto ,O extends User | Status,T extends PagedItemRequest<D>,S extends PagedItemResponse<D>>(
       request: T, 
       endpoint: string,
