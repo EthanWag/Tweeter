@@ -1,4 +1,4 @@
-import { AuthToken, User, FakeData, PagedUserItemRequest, UserDto, CountFollowRequest, isNull, IsFollowRequest } from "tweeter-shared";
+import { AuthToken, User, PagedUserItemRequest, UserDto, CountFollowRequest, isNull, IsFollowRequest } from "tweeter-shared";
 import { ServerFacade } from "../ServerFacade";
 
 export class FollowService {
@@ -93,6 +93,8 @@ private toDto(user: User | null): UserDto | null {
     const facade = new ServerFacade();
     return facade.getFollowerCount(this.countRequestBuilder(token, user));
   };
+
+  // you have to do all of the set operations, so ya that good
 
 
 }

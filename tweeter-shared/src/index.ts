@@ -21,6 +21,7 @@ export type { PagedStatusItemRequest } from "./model/net/request/PagedStatusItem
 export type { CountFollowRequest } from "./model/net/request/CountFollowRequest";
 export type { IsFollowRequest } from "./model/net/request/IsFollowRequest";
 export type { GetUserRequest } from "./model/net/request/GetUserRequest";
+export type { LoginRequest } from "./model/net/request/LoginRequest";
 
 // response classes
 export type { TweeterResponse } from "./model/net/response/TweeterResponse";
@@ -30,6 +31,7 @@ export type { PagedStatusItemResponse } from "./model/net/response/PagedStatusIt
 export type { IsValidResponse } from "./model/net/response/IsValidResponse";
 export type { CountResponse } from "./model/net/response/CountResponse";
 export type { GetUserResponse } from "./model/net/response/GetUserResponse";
+export type { AuthPassResponse } from "./model/net/response/AuthPassResponse";
 
 // Take data for testing
 export { FakeData } from "./util/FakeData";

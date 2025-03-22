@@ -7,6 +7,7 @@ import {
     PagedUserItemResponse,
     Status,
     User,
+    AuthToken,
     UserDto,
     StatusDto,
     CountFollowRequest,
@@ -18,9 +19,12 @@ import {
     GetUserRequest,
     GetUserResponse,
     NoAuthTweeterRequest,
-    isNull
+    isNull,
+    LoginRequest,
+    AuthPassResponse
   } from "tweeter-shared";
   import { ClientCommunicator } from "./network/ClientCommunicator";
+import userEvent from '@testing-library/user-event';
   
   export class ServerFacade {
     private SERVER_URL = "https://799n9hdm1i.execute-api.us-east-1.amazonaws.com/dev"; // ask about this a bit, seems like a security risk and it's might not remain the same
@@ -154,6 +158,27 @@ import {
       }catch(error){
           console.error(error);
           throw error;
+      }
+    }
+
+    public async login(request: LoginRequest): Promise<[User|null,AuthToken|null, boolean]> {
+      try {
+        const response = await this.callServer<LoginRequest, AuthPassResponse>(
+          request,
+          "/auth/login"
+        );
+        let user = null;
+        let token = null;
+
+        if(response.valid){
+          user = User.fromDto(response.user);
+          token = AuthToken.fromDto(response.authToken);
+        }
+
+        return [user, token, response.valid];
+      } catch (error) {
+        console.error(error);
+        throw error;
       }
     }
 

@@ -1,4 +1,5 @@
 import { v4 as uuid } from "uuid";
+import { AuthDto } from "../dto/AuthDto";
 export class AuthToken {
   private _token: string;
   private _timestamp: number;
@@ -57,6 +58,17 @@ export class AuthToken {
     } else {
       return null;
     }
+  }
+
+  public get dto(): AuthDto {
+    return {
+      token: this._token,
+      timestamp: this._timestamp,
+    };
+  }
+
+  public static fromDto(dto: AuthDto | null ): AuthToken | null {
+      return dto == null ? null : new AuthToken(dto.token, dto.timestamp);
   }
 
   public toJson(): string {

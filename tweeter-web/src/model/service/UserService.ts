@@ -1,19 +1,17 @@
-import {AuthToken,User,FakeData} from "tweeter-shared";
+import { AuthToken, User, FakeData } from "tweeter-shared";
+import { ServerFacade } from "../ServerFacade";
 import { Buffer } from "buffer";
 
 export class UserService {
 
   // these two functions require data so that's good
   public async login(alias: string,password: string): Promise<[User, AuthToken]>{
+    const facade = new ServerFacade();
 
-    // TODO: Replace with the result of calling the server
-    const user = FakeData.instance.firstUser; // This one will need to be replaced by a server call
-
-
-    if (user === null) {
-      throw new Error("Invalid alias or password");
-    }
-    return [user, FakeData.instance.authToken]; // This one will need to be replaced by a server call
+    // NOTE: This is a temporary solution; user and token could be null
+    // valid, should let you know if the login was successful, so use it to check if it was successful
+    const [user,token,valid] = await facade.login({alias, password});
+    return [user!, token!];
   };
 
   public async register(
