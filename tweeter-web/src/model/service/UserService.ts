@@ -5,12 +5,15 @@ export class UserService {
 
   // these two functions require data so that's good
   public async login(alias: string,password: string): Promise<[User, AuthToken]>{
+
     // TODO: Replace with the result of calling the server
-    const user = FakeData.instance.firstUser;
+    const user = FakeData.instance.firstUser; // This one will need to be replaced by a server call
+
+
     if (user === null) {
       throw new Error("Invalid alias or password");
     }
-    return [user, FakeData.instance.authToken];
+    return [user, FakeData.instance.authToken]; // This one will need to be replaced by a server call
   };
 
   public async register(
@@ -21,7 +24,6 @@ export class UserService {
     userImageBytes: Uint8Array,
     imageFileExtension: string
   ): Promise<[User, AuthToken]>{
-    // Not needed now, but will be needed when you make the request to the server in milestone 3
     const imageStringBase64: string =
       Buffer.from(userImageBytes).toString("base64");
 

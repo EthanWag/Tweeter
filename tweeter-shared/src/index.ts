@@ -14,11 +14,13 @@ export type{ StatusDto } from "./model/dto/StatusDto";
 
 // request classes
 export type { TweeterRequest } from "./model/net/request/TweeterRequest";
+export type { NoAuthTweeterRequest } from "./model/net/request/NoAuthTweeterRequest";
 export type { PagedItemRequest } from "./model/net/request/PagedItemRequest";
 export type { PagedUserItemRequest } from "./model/net/request/PagedUserItemRequest";
 export type { PagedStatusItemRequest } from "./model/net/request/PagedStatusItemRequest";
 export type { CountFollowRequest } from "./model/net/request/CountFollowRequest";
 export type { IsFollowRequest } from "./model/net/request/IsFollowRequest";
+export type { GetUserRequest } from "./model/net/request/GetUserRequest";
 
 // response classes
 export type { TweeterResponse } from "./model/net/response/TweeterResponse";
@@ -27,6 +29,7 @@ export type { PagedUserItemResponse } from "./model/net/response/PagedUserItemRe
 export type { PagedStatusItemResponse } from "./model/net/response/PagedStatusItemResponse";
 export type { IsValidResponse } from "./model/net/response/IsValidResponse";
 export type { CountResponse } from "./model/net/response/CountResponse";
+export type { GetUserResponse } from "./model/net/response/GetUserResponse";
 
 // Take data for testing
 export { FakeData } from "./util/FakeData";

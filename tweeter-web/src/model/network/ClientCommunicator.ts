@@ -1,4 +1,4 @@
-import { TweeterRequest, TweeterResponse } from "tweeter-shared";
+import { TweeterRequest, TweeterResponse, NoAuthTweeterRequest } from "tweeter-shared";
 
 export class ClientCommunicator {
   private SERVER_URL: string;
@@ -7,7 +7,7 @@ export class ClientCommunicator {
     this.SERVER_URL = SERVER_URL;
   }
 
-  public async doPost<REQ extends TweeterRequest, RES extends TweeterResponse>(
+  public async doPost<REQ extends TweeterRequest | NoAuthTweeterRequest, RES extends TweeterResponse>(
     req: REQ | undefined,
     endpoint: string,
     headers?: Headers
@@ -19,15 +19,13 @@ export class ClientCommunicator {
         "Content-type": "application/json",
       });
     }
-    console.log(req);
-
     console.log(`The request body is '${JSON.stringify(req)}'`);
 
     const url = this.getUrl(endpoint);
     const params = this.getParams(
       "POST",
       headers,
-      req ? JSON.stringify(req) : req
+      req !== undefined ? JSON.stringify(req) : "{}"
     );
     
     console.log(`Fetching '${url}' with params '${JSON.stringify(params)}'`);

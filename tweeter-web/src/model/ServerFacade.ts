@@ -14,7 +14,11 @@ import {
     IsFollowRequest,
     PagedItemRequest,
     PagedItemResponse,
-    IsValidResponse
+    IsValidResponse,
+    GetUserRequest,
+    GetUserResponse,
+    NoAuthTweeterRequest,
+    isNull
   } from "tweeter-shared";
   import { ClientCommunicator } from "./network/ClientCommunicator";
   
@@ -133,6 +137,26 @@ import {
       }
     }
 
+    public async GetUser(request:GetUserRequest): Promise<[User|null,boolean]>{
+      try{
+        const response = await this.callServer<GetUserRequest,GetUserResponse>(
+          request,
+          "/post/user"
+        )
+
+        let user: User | null = null;
+
+        if(!isNull(response.user)){
+          user = User.fromDto(response.user);
+        }
+
+        return [user, response.found];
+      }catch(error){
+          console.error(error);
+          throw error;
+      }
+    }
+
     private async makePagedRequest<D extends UserDto | StatusDto ,O extends User | Status,T extends PagedItemRequest<D>,S extends PagedItemResponse<D>>(
       request: T, 
       endpoint: string,
@@ -154,7 +178,7 @@ import {
       }
     }
 
-    private async callServer<T extends TweeterRequest,S extends TweeterResponse>(
+    private async callServer<T extends TweeterRequest | NoAuthTweeterRequest ,S extends TweeterResponse>(
         request: T,
         endpoint: string
       ): Promise<S> {

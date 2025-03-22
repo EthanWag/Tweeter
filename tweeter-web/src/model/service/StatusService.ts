@@ -21,7 +21,6 @@ export class StatusService {
         let facade = new ServerFacade();
           return facade.getMoreStoryItems(this.followeesRequestBuilder(authToken, alias, pageSize, lastItem));
       };
-        // return FakeData.instance.getPageOfStatuses(lastItem, pageSize);
 
 
       // nice clean functions
@@ -54,5 +53,6 @@ export class StatusService {
         await new Promise((f) => setTimeout(f, 2000));
     
         // TODO: Call the server to post the status
+        // end point here
       };
 }
