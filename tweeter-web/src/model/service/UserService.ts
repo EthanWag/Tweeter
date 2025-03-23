@@ -1,6 +1,5 @@
-import { AuthToken, User, FakeData } from "tweeter-shared";
+import { AuthToken, User, ImageCompressor } from "tweeter-shared";
 import { ServerFacade } from "../ServerFacade";
-import { Buffer } from "buffer";
 
 export class UserService {
 
@@ -19,19 +18,25 @@ export class UserService {
     lastName: string,
     alias: string,
     password: string,
-    userImageBytes: Uint8Array,
+    image: Uint8Array, // note, this had the following name userImageBytes
     imageFileExtension: string
   ): Promise<[User, AuthToken]>{
-    const imageStringBase64: string =
-      Buffer.from(userImageBytes).toString("base64");
 
-    // TODO: Replace with the result of calling the server
-    const user = FakeData.instance.firstUser;
+    // Convert the image to a base64 string, so that it can be sent
+    const compressor = new ImageCompressor();
+    const userImageBytes = await compressor.compressImage(image,imageFileExtension);
 
-    if (user === null) {
-      throw new Error("Invalid registration");
-    }
-    return [user, FakeData.instance.authToken];
+    const facade = new ServerFacade();
+    const [user, token, valid] = await facade.register({
+      firstName,
+      lastName,
+      alias,
+      password,
+      userImageBytes,
+      imageFileExtension
+    });
+    // NOTE: you can use the valid to check to see if the register was successful
+    return [user!, token!];
   };
 
   public async logout(authToken: AuthToken): Promise<void>{

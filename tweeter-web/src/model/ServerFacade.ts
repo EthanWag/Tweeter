@@ -21,10 +21,10 @@ import {
     NoAuthTweeterRequest,
     isNull,
     LoginRequest,
-    AuthPassResponse
+    AuthPassResponse,
+    RegisterRequest
   } from "tweeter-shared";
   import { ClientCommunicator } from "./network/ClientCommunicator";
-import userEvent from '@testing-library/user-event';
   
   export class ServerFacade {
     private SERVER_URL = "https://799n9hdm1i.execute-api.us-east-1.amazonaws.com/dev"; // ask about this a bit, seems like a security risk and it's might not remain the same
@@ -182,6 +182,29 @@ import userEvent from '@testing-library/user-event';
       }
     }
 
+    public async register(request: RegisterRequest): Promise<[User|null,AuthToken|null, boolean]> {
+      try {
+        const response = await this.callServer<RegisterRequest, AuthPassResponse>(
+          request,
+          "/auth/register"
+        );
+        // duplicate code, you can probaly get rid of some of this stuff
+        let user = null;
+        let token = null;
+
+        if(response.valid){
+          user = User.fromDto(response.user);
+          token = AuthToken.fromDto(response.authToken);
+        }
+
+        return [user, token, response.valid];
+      } catch (error) {
+        console.error(error);
+        throw error
+      }
+    }
+
+
     private async makePagedRequest<D extends UserDto | StatusDto ,O extends User | Status,T extends PagedItemRequest<D>,S extends PagedItemResponse<D>>(
       request: T, 
       endpoint: string,
@@ -222,6 +245,3 @@ import userEvent from '@testing-library/user-event';
       )
     }
   }
-
-
-  // make a function that handles all of these errors and lets the other functions know, so ya

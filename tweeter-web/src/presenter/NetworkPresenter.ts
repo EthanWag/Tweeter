@@ -17,7 +17,7 @@ export class NetworkPresenter extends Presenter<NetworkView>{
         this.view.setIsFollower(
             currentUser === displayedUser 
                 ? false 
-                : await this.followService.getIsFollowerStatus(authToken!, currentUser!, displayedUser!)
+                : await this.followService.getIsFollowerStatus(authToken.token!, currentUser!, displayedUser!)
             );
         },"determine follower status");
     };
@@ -25,7 +25,7 @@ export class NetworkPresenter extends Presenter<NetworkView>{
     public async setNumbFollowees(authToken: AuthToken,displayedUser: User){
         this.doTryOperation(async () => {
             this.view.setFolloweeCount(
-                await this.followService.getFolloweeCount(authToken,displayedUser)
+                await this.followService.getFolloweeCount(authToken.token,displayedUser)
             );
         },"get followees count");
     };
@@ -33,7 +33,7 @@ export class NetworkPresenter extends Presenter<NetworkView>{
     public async setNumbFollowers(authToken: AuthToken,displayedUser: User){
         this.doTryOperation(async () => {
             this.view.setFollowerCount(
-                await this.followService.getFollowerCount(authToken,displayedUser)
+                await this.followService.getFollowerCount(authToken.token,displayedUser)
             );
         },"get followers count");
     };
@@ -46,8 +46,8 @@ export class NetworkPresenter extends Presenter<NetworkView>{
 
         // TODO: Call the server
 
-        const followerCount = await this.followService.getFollowerCount(authToken, userToFollow);
-        const followeeCount = await this.followService.getFolloweeCount(authToken, userToFollow);
+        const followerCount = await this.followService.getFollowerCount(authToken.token, userToFollow);
+        const followeeCount = await this.followService.getFolloweeCount(authToken.token, userToFollow);
 
         return [followerCount, followeeCount];
     };
@@ -58,8 +58,8 @@ export class NetworkPresenter extends Presenter<NetworkView>{
 
         // TODO: Call the server
 
-        const followerCount = await this.followService.getFollowerCount(authToken, userToUnfollow);
-        const followeeCount = await this.followService.getFolloweeCount(authToken, userToUnfollow);
+        const followerCount = await this.followService.getFollowerCount(authToken.token, userToUnfollow);
+        const followeeCount = await this.followService.getFolloweeCount(authToken.token, userToUnfollow);
 
         return [followerCount, followeeCount];
     };

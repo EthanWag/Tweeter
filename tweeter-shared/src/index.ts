@@ -1,3 +1,5 @@
+import { ImageCompressor } from "./util/ImageCompressor";
+
 export { Follow } from "./model/domain/Follow";
 export { PostSegment, Type } from "./model/domain/PostSegment";
 export { Status } from "./model/domain/Status";
@@ -22,6 +24,7 @@ export type { CountFollowRequest } from "./model/net/request/CountFollowRequest"
 export type { IsFollowRequest } from "./model/net/request/IsFollowRequest";
 export type { GetUserRequest } from "./model/net/request/GetUserRequest";
 export type { LoginRequest } from "./model/net/request/LoginRequest";
+export type { RegisterRequest } from "./model/net/request/RegisterRequest";
 
 // response classes
 export type { TweeterResponse } from "./model/net/response/TweeterResponse";
@@ -38,3 +41,4 @@ export { FakeData } from "./util/FakeData";
 
 // Misc functions
 export { isNull } from "./util/IsNull";
+export { ImageCompressor } from "./util/ImageCompressor";

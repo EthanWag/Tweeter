@@ -19,7 +19,8 @@ export class ClientCommunicator {
         "Content-type": "application/json",
       });
     }
-    console.log(`The request body is '${JSON.stringify(req)}'`);
+    // console.log(`The request is '${req}'`);
+    // console.log(`The request body is '${JSON.stringify(req)}'`);
 
     const url = this.getUrl(endpoint);
     const params = this.getParams(
@@ -28,10 +29,12 @@ export class ClientCommunicator {
       req !== undefined ? JSON.stringify(req) : "{}"
     );
     
-    console.log(`Fetching '${url}' with params '${JSON.stringify(params)}'`);
+    // console.log(`Fetching '${url}' with params '${JSON.stringify(params)}'`);
 
     try {
       const resp: Response = await fetch(url, params);
+
+      console.log(`Response from '${url}' is '${resp}'`);
 
       if (resp.ok) {
         // Be careful with the return type here. resp.json() returns Promise<any> which means there is no type checking on response.
