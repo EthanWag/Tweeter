@@ -1,33 +1,33 @@
 import { AuthToken, User , Status } from 'tweeter-shared';
 import { StatusService } from '../model/service/StatusService';
 import { PostView, Presenter } from './Presenter';
+import { PostsService } from '../model/service/PostService';
 
 
 
 export class PostStatusPresenter extends Presenter<PostView> {
 
-    private _statusService: StatusService | null = null;
+    private _postService: PostsService | null = null;
 
     public constructor(view: PostView) {
         super(view);
     }
 
-    public get statusService() {
-        if(this._statusService === null) {
-            this._statusService = new StatusService();
+    public get postService() {
+        if(this._postService === null) {
+            this._postService = new PostsService();
         }
-        return this._statusService;
+        return this._postService;
     }
 
     public async submitPost(event: React.MouseEvent | null, post: string, currentUser: User, authToken: AuthToken) {
         if(event){
-                    event.preventDefault();
+            event.preventDefault();
         }
-        
         this.doUpdateOperation(async () => {
             this.view.displayInfoMessage("Posting status...", 0);
             const status = new Status(post, currentUser!, Date.now());
-            await this.statusService.postStatus(authToken!, status);
+            await this.postService.postStatus(authToken!, status);
             this.view.setPost("");
             this.view.displayInfoMessage("Status posted!", 2000);
         },

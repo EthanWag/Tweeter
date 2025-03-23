@@ -15,5 +15,6 @@ tweeterRegister | lambda/authorization/RegisterLambda.handler
 tweeterFollow | lambda/follow/FollowLambda.handler
 tweeterUnfollow | lambda/follow/UnfollowLambda.handler
 tweeterSetIsFollower | lambda/follow/SetIsFollowerLambda.handler
+tweeterPostStatus | lambda/post/PostStatusLambda.handler
 '
-LAMBDALAYER_ARN='arn:aws:lambda:us-east-1:324037310840:layer:tweeterLambdaLayer:29'
+LAMBDALAYER_ARN='arn:aws:lambda:us-east-1:324037310840:layer:tweeterLambdaLayer:30'

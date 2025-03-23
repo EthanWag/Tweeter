@@ -19,7 +19,6 @@ import { AccountView, PagedItemView } from './presenter/Presenter';
 
 import { PagedItemPresenter } from "./presenter/PagedItemPresenter";
 import { RegisterPresenter } from "./presenter/RegisterPresenter";
-import { LoginPresenter } from "./presenter/LoginPresenter";
 import { FolloweePresenter} from './presenter/FolloweePresenter';
 import { FollowerPresenter } from "./presenter/FollowerPresenter";
 import { FeedPresenter } from "./presenter/FeedPresenter";

@@ -25,7 +25,8 @@ import {
     RegisterRequest,
     FollowRequest,
     FollowResponse,
-    SetIsFollowerRequest
+    SetIsFollowerRequest,
+    PostStatusRequest
   } from "tweeter-shared";
   import { ClientCommunicator } from "./network/ClientCommunicator";
   
@@ -244,6 +245,21 @@ import {
         console.error(error);
         throw error
       }
+    }
+
+    public async postStatus(request:PostStatusRequest):Promise<boolean>{
+      try {
+        const response = await this.callServer<PostStatusRequest, IsValidResponse>(
+          request,
+          "/post/deploy"
+        );
+        return response.valid
+      } catch (error) {
+        console.error(error);
+        throw error
+      }
+
+
     }
 
     private async makePagedRequest<D extends UserDto | StatusDto ,O extends User | Status,T extends PagedItemRequest<D>,S extends PagedItemResponse<D>>(

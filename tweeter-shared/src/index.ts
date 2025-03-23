@@ -25,6 +25,7 @@ export type { LoginRequest } from "./model/net/request/LoginRequest";
 export type { RegisterRequest } from "./model/net/request/RegisterRequest";
 export type { SetIsFollowerRequest } from "./model/net/request/SetIsFollowerRequest";
 export type { FollowRequest } from "./model/net/request/FollowRequest";
+export type { PostStatusRequest } from "./model/net/request/PostStatusRequest";
 
 // response classes
 export type { TweeterResponse } from "./model/net/response/TweeterResponse";
