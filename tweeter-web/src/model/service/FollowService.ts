@@ -1,4 +1,4 @@
-import { AuthToken, User, PagedUserItemRequest, UserDto, CountFollowRequest, isNull, IsFollowRequest } from "tweeter-shared";
+import { AuthToken, User, PagedUserItemRequest, UserDto, CountFollowRequest, isNull, IsFollowRequest, FollowRequest } from "tweeter-shared";
 import { ServerFacade } from "../ServerFacade";
 
 export class FollowService {
@@ -94,12 +94,16 @@ private toDto(user: User | null): UserDto | null {
     return facade.getFollowerCount(this.countRequestBuilder(token, user));
   };
 
-  public async follow(): Promise<boolean> {
-    return true;
+  public async follow(authToken: AuthToken,userToFollow: User): Promise<[number,number]> {
+    const facade = new ServerFacade();
+    facade.setIsFollowerStatus({token: authToken.token, user: this.toDto(userToFollow)!, doesFollow: true});
+    return facade.follow({token: authToken.token, user: this.toDto(userToFollow)!});
   };
 
-  public async unfollow(): Promise<boolean> {
-    return true;
+  public async unfollow(authToken: AuthToken,userToUnfollow: User): Promise<[number,number]> {
+    const facade = new ServerFacade();
+    facade.setIsFollowerStatus({token: authToken.token, user: this.toDto(userToUnfollow)!, doesFollow: false});
+    return facade.unfollow({token: authToken.token, user: this.toDto(userToUnfollow)!});
   };
 
 

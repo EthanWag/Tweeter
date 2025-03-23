@@ -22,7 +22,10 @@ import {
     isNull,
     LoginRequest,
     AuthPassResponse,
-    RegisterRequest
+    RegisterRequest,
+    FollowRequest,
+    FollowResponse,
+    SetIsFollowerRequest
   } from "tweeter-shared";
   import { ClientCommunicator } from "./network/ClientCommunicator";
   
@@ -204,6 +207,44 @@ import {
       }
     }
 
+    public async follow(request: FollowRequest):Promise<[number,number]>{
+      try {
+        const response = await this.callServer<FollowRequest, FollowResponse>(
+          request,
+          "/follow"
+        );
+        return [response.followerCount, response.followeeCount];
+      } catch (error) {
+        console.error(error);
+        throw error
+      }
+    }
+
+    public async unfollow(request:FollowRequest):Promise<[number,number]>{
+      try {
+        const response = await this.callServer<FollowRequest, FollowResponse>(
+          request,
+          "/unfollow"
+        );
+        return [response.followerCount, response.followeeCount];
+      } catch (error) {
+        console.error(error);
+        throw error
+      }
+    }
+
+    public async setIsFollowerStatus(request:SetIsFollowerRequest):Promise<boolean>{
+      try {
+        const response = await this.callServer<SetIsFollowerRequest, IsValidResponse>(
+          request,
+          "/follower/set"
+        );
+        return response.valid // this will tell you if you were successful
+      } catch (error) {
+        console.error(error);
+        throw error
+      }
+    }
 
     private async makePagedRequest<D extends UserDto | StatusDto ,O extends User | Status,T extends PagedItemRequest<D>,S extends PagedItemResponse<D>>(
       request: T, 

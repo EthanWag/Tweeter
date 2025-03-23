@@ -40,14 +40,14 @@ export class FollowService {
     return FakeData.instance.getFollowerCount(user.alias);
   };
 
-  public async setFollowerCount(token: string, user: User, count: number): Promise<void> {
+  public async follow(token: string, userToFollow: User): Promise<[number,number]> {
     // do logic here that sets the follower count
-    return;
+    return [0,0];
   }
 
-  public async setFolloweeCount(token: string, user: User, count: number): Promise<void> {
+  public async unfollow(token: string, userToFollow: User): Promise<[number,number]> {
     // do logic here that sets the followee count
-    return;
+    return [999,999];
   }
 
   public async setIsFollowerStatus(token: string, user: User, selectedUser: User, isFollower: boolean): Promise<void> {

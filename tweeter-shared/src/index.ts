@@ -1,5 +1,3 @@
-import { ImageCompressor } from "./util/ImageCompressor";
-
 export { Follow } from "./model/domain/Follow";
 export { PostSegment, Type } from "./model/domain/PostSegment";
 export { Status } from "./model/domain/Status";
@@ -25,7 +23,8 @@ export type { IsFollowRequest } from "./model/net/request/IsFollowRequest";
 export type { GetUserRequest } from "./model/net/request/GetUserRequest";
 export type { LoginRequest } from "./model/net/request/LoginRequest";
 export type { RegisterRequest } from "./model/net/request/RegisterRequest";
-export type { SetCountFollowRequest } from "./model/net/request/SetCountFollowRequest";
+export type { SetIsFollowerRequest } from "./model/net/request/SetIsFollowerRequest";
+export type { FollowRequest } from "./model/net/request/FollowRequest";
 
 // response classes
 export type { TweeterResponse } from "./model/net/response/TweeterResponse";
@@ -36,6 +35,7 @@ export type { IsValidResponse } from "./model/net/response/IsValidResponse";
 export type { CountResponse } from "./model/net/response/CountResponse";
 export type { GetUserResponse } from "./model/net/response/GetUserResponse";
 export type { AuthPassResponse } from "./model/net/response/AuthPassResponse";
+export type { FollowResponse } from "./model/net/response/FollowResponse";
 
 // Take data for testing
 export { FakeData } from "./util/FakeData";
