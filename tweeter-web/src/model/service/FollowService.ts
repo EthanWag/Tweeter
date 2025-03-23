@@ -94,7 +94,13 @@ private toDto(user: User | null): UserDto | null {
     return facade.getFollowerCount(this.countRequestBuilder(token, user));
   };
 
-  // you have to do all of the set operations, so ya that good
+  public async follow(): Promise<boolean> {
+    return true;
+  };
+
+  public async unfollow(): Promise<boolean> {
+    return true;
+  };
 
 
 }
