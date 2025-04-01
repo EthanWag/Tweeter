@@ -7,7 +7,7 @@ import {
     UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { PutObjectCommand, S3Client, ObjectCannedACL } from '@aws-sdk/client-s3';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 import { UserDAO } from '../../DAOInterfaces/UserDAO';
 import { User } from "tweeter-shared";
@@ -94,7 +94,6 @@ export class UserDAODynamoDB implements UserDAO {
       return `Failed to ${warning} with error: ${error}`;
     }
 
-    
     private async putImage(
         fileName: string,
         imageStringBase64Encoded: string
