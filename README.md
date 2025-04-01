@@ -24,12 +24,3 @@ Rebuild either module of the project (tweeter-shared or tweeter-web) by running 
 ## Running the Project
 
 Run the project by running 'npm start' from within the 'tweeter-web' folder.
-
-
-## My Project Notes:
-
-### Here are the following classes that still need to be delt with
-- register and login
-- AppNavBar
-- PostStatus
-- UserInfoProvider
