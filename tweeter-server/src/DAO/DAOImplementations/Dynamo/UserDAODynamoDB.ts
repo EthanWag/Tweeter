@@ -10,6 +10,7 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { PutObjectCommand, S3Client, ObjectCannedACL } from '@aws-sdk/client-s3';
 
 import { UserDAO } from '../../DAOInterfaces/UserDAO';
+import { User } from "tweeter-shared";
 
 export class UserDAODynamoDB implements UserDAO {
 
@@ -20,25 +21,31 @@ export class UserDAODynamoDB implements UserDAO {
     public async getUser(alias: string): Promise<any> {
         throw new Error('Method not implemented.');
     }
-    public async createUser(alias: string, firstName: string, lastName: string, encryptedPassword: string, userImageBytesString: string, imageExtention: string): Promise<void> {
+    public async createUser(alias: string, firstName: string, lastName: string, encryptedPassword: string, userImageBytesString: string, imageExtention: string): Promise<User> {
 
         // generate a file name here???? huhh 
 
-
-        await this.client.send(
+        try{
+          await this.client.send(
             new PutCommand({
                 TableName: this.tableName,
                 Item: {
                     alias: alias,
                     firstName: firstName,
                     lastName: lastName,
-                    encryptedPassword: encryptedPassword,
+                    password: encryptedPassword,
                     // userImage: await this.putImage(this.generateFileName(alias, imageExtention), userImageBytesString)
                 }
             })
-        );
-
+          );
+          // userImage: await this.putImage(this.generateFileName(alias, imageExtention), userImageBytesString)
+          return new User(firstName, lastName, alias, "nutty");
+        }catch(error){
+            throw new Error("Failed to create user with error: " + error);
+        }
     }
+
+
     public async getPassword(alias: string): Promise<string> {
         throw new Error('Method not implemented.');
     }

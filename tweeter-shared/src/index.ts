@@ -43,4 +43,5 @@ export { FakeData } from "./util/FakeData";
 
 // Misc functions
 export { isNull } from "./util/IsNull";
+export { Error } from "./model/domain/Error";
 export { ImageCompressor } from "./util/ImageCompressor";

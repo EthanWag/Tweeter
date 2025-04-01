@@ -37,14 +37,11 @@ export class AuthService {
     const imageStringBase64: string =
       Buffer.from(userImageBytes).toString("base64");
 
-    const user = FakeData.instance.firstUser;
-
-    this.userDAO.createUser(alias, firstName, lastName, password, imageStringBase64, imageFileExtension);
+    const user = await this.userDAO.createUser(alias, firstName, lastName, password, imageStringBase64, imageFileExtension);
 
     // you will want to create a better check than this
-    if (user === null) {
-      throw new Error("Invalid registration");
-    }
+
+    // check in the lambda function
     return [user, FakeData.instance.authToken];
   };
 

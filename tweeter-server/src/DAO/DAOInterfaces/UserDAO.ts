@@ -1,3 +1,4 @@
+import { User } from "tweeter-shared";
 import { DAO } from "./DAO";
 
 // This interface has anything to do with user information in the database
@@ -12,7 +13,7 @@ export interface UserDAO extends DAO{
         encryptedPassword: string,
         userImageBytesString: string,
         imageExtention: string
-    ): Promise<void>; // throw an error if things go wrong???
+    ): Promise<User>; // throw an error if things go wrong???
 
     // does exist?
 
