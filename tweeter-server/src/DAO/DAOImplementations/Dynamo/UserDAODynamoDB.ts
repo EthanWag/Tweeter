@@ -12,17 +12,24 @@ import { PutObjectCommand, S3Client, ObjectCannedACL } from '@aws-sdk/client-s3'
 import { UserDAO } from '../../DAOInterfaces/UserDAO';
 import { User } from "tweeter-shared";
 
-import { BUCKET, REGION } from ".env";
+import * as dotenv from "dotenv";
+dotenv.config({ path: '../../.env' });
 
 export class UserDAODynamoDB implements UserDAO {
 
     private readonly tableName = "User"; // maybe pull that one out
     private readonly client = DynamoDBDocumentClient.from(new DynamoDBClient());
+    private readonly REGION = process.env.REGION;
+    private readonly BUCKET = process.env.BUCKET;
 
     public async getUser(alias: string): Promise<any> {
         throw new Error('Method not implemented.');
     }
     public async createUser(alias: string, firstName: string, lastName: string, encryptedPassword: string, userImageBytesString: string, imageExtention: string): Promise<User> {
+
+      console.log(this.BUCKET);
+      console.log(this.REGION);
+
 
         try{
           await this.doesExsist(alias); // will throw an error if a user is already registered
@@ -91,27 +98,26 @@ export class UserDAODynamoDB implements UserDAO {
     private async putImage(
         fileName: string,
         imageStringBase64Encoded: string
-      ): Promise<string> {
-        let decodedImageBuffer: Buffer = Buffer.from(
-          imageStringBase64Encoded,
-          "base64"
+    ): Promise<string> {
+      let decodedImageBuffer: Buffer = Buffer.from(
+        imageStringBase64Encoded,
+        "base64"
+      );
+      const s3Params = {
+        Bucket: this.BUCKET,
+        Key: "image/" + fileName,
+        Body: decodedImageBuffer,
+        ContentType: "image/png",
+      };
+      const c = new PutObjectCommand(s3Params);
+      const client = new S3Client({ region: this.REGION });
+      try {
+        await client.send(c);
+        return (
+        `https://${this.BUCKET}.s3.${this.REGION}.amazonaws.com/image/${fileName}`
         );
-        const s3Params = {
-          Bucket: BUCKET,
-          Key: "image/" + fileName,
-          Body: decodedImageBuffer,
-          ContentType: "image/png",
-          ACL: ObjectCannedACL.public_read,
-        };
-        const c = new PutObjectCommand(s3Params);
-        const client = new S3Client({ region: REGION });
-        try {
-          await client.send(c);
-          return (
-          `https://${BUCKET}.s3.${REGION}.amazonaws.com/image/${fileName}`
-          );
-        } catch (error) {
-          throw Error("s3 put image failed with: " + error);
-        }
+      } catch (error) {
+        throw Error("s3 put image failed with: " + error);
       }
+    }
 }

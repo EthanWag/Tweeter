@@ -8,10 +8,12 @@
   "author": "JWilkerson",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.7",
     "rimraf": "^5.0.5",
     "vite-plugin-dts": "^4.5.0"
   },
   "devDependencies": {
+    "@types/dotenv": "^6.1.1",
     "whatwg-fetch": "^3.6.20"
   }
 }
