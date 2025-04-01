@@ -17,15 +17,17 @@ export class UserDAODynamoDB implements UserDAO {
     private readonly tableName = "User"; // maybe pull that one out
     private readonly client = DynamoDBDocumentClient.from(new DynamoDBClient());
 
-
     public async getUser(alias: string): Promise<any> {
         throw new Error('Method not implemented.');
     }
     public async createUser(alias: string, firstName: string, lastName: string, encryptedPassword: string, userImageBytesString: string, imageExtention: string): Promise<User> {
 
         // generate a file name here???? huhh 
-
+        // possibly even pull this out into a helper function in all the DAOs
         try{
+          // first we want to try to see if the user already exists
+          await this.doesExsist(alias);
+
           await this.client.send(
             new PutCommand({
                 TableName: this.tableName,
@@ -40,8 +42,8 @@ export class UserDAODynamoDB implements UserDAO {
           );
           // userImage: await this.putImage(this.generateFileName(alias, imageExtention), userImageBytesString)
           return new User(firstName, lastName, alias, "nutty");
-        }catch(error){
-            throw new Error("Failed to create user with error: " + error);
+        }catch(error:any){
+            throw this.errorMessage("create user", (error as Error).message);
         }
     }
 
@@ -53,6 +55,31 @@ export class UserDAODynamoDB implements UserDAO {
     // just makes a name for the user, nothing to crazy
     private generateFileName(alias: string, imageExtention: string): string {
         return alias + "." + imageExtention;
+    }
+
+    public async doesExsist(alias: string): Promise<void> {
+      try {
+          const result = await this.client.send(
+              new GetCommand({
+                  TableName: this.tableName,
+                  Key: {
+                      alias: alias
+                  }
+              })
+          );
+          const check = result.Item !== undefined;
+
+          if (check) {
+              throw new Error("User already exists");
+          }
+
+      } catch (error) {
+          throw error;
+      }
+    }
+
+    public errorMessage(warning:string, error: string): string {
+      return `Failed to ${warning} with error: ${error}`;
     }
 
     /*
