@@ -12,6 +12,8 @@ import { PutObjectCommand, S3Client, ObjectCannedACL } from '@aws-sdk/client-s3'
 import { UserDAO } from '../../DAOInterfaces/UserDAO';
 import { User } from "tweeter-shared";
 
+import { BUCKET, REGION } from ".env";
+
 export class UserDAODynamoDB implements UserDAO {
 
     private readonly tableName = "User"; // maybe pull that one out
@@ -22,26 +24,29 @@ export class UserDAODynamoDB implements UserDAO {
     }
     public async createUser(alias: string, firstName: string, lastName: string, encryptedPassword: string, userImageBytesString: string, imageExtention: string): Promise<User> {
 
-        // generate a file name here???? huhh 
-        // possibly even pull this out into a helper function in all the DAOs
         try{
-          // first we want to try to see if the user already exists
-          await this.doesExsist(alias);
+          await this.doesExsist(alias); // will throw an error if a user is already registered
+
+          // here we need to be able to store and create the image link
+          const filename = this.generateFileName(alias, imageExtention);
+          const userImageLink = await this.putImage(filename, userImageBytesString);
+
+          const user = new User(firstName, lastName, alias, userImageLink);
 
           await this.client.send(
             new PutCommand({
                 TableName: this.tableName,
                 Item: {
-                    alias: alias,
-                    firstName: firstName,
-                    lastName: lastName,
-                    password: encryptedPassword,
-                    // userImage: await this.putImage(this.generateFileName(alias, imageExtention), userImageBytesString)
+                    alias: user.alias,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    userImage: user.imageUrl,
+                    password: encryptedPassword
                 }
             })
           );
-          // userImage: await this.putImage(this.generateFileName(alias, imageExtention), userImageBytesString)
-          return new User(firstName, lastName, alias, "nutty");
+          // returns the user if everything went well
+          return user;
         }catch(error:any){
             throw this.errorMessage("create user", (error as Error).message);
         }
@@ -54,7 +59,7 @@ export class UserDAODynamoDB implements UserDAO {
 
     // just makes a name for the user, nothing to crazy
     private generateFileName(alias: string, imageExtention: string): string {
-        return alias + "." + imageExtention;
+        return alias + "-profile-picture." + imageExtention;
     }
 
     public async doesExsist(alias: string): Promise<void> {
@@ -82,7 +87,7 @@ export class UserDAODynamoDB implements UserDAO {
       return `Failed to ${warning} with error: ${error}`;
     }
 
-    /*
+    
     private async putImage(
         fileName: string,
         imageStringBase64Encoded: string
@@ -109,5 +114,4 @@ export class UserDAODynamoDB implements UserDAO {
           throw Error("s3 put image failed with: " + error);
         }
       }
-      */
 }
