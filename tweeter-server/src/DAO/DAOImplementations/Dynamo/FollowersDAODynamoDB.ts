@@ -28,8 +28,8 @@ export class FollowersDAODynamoDB implements FollowersDAO {
 
     public async addFollower(alias: string, followerAlias: string): Promise<void> {
         
-        // check to see if the user even exsists
-        await this.doesExists(alias);
+        // This does not make any sense, it just means they don't follow anyone
+        // await this.doesExists(alias);
 
         await this.client.send(
             new PutCommand({

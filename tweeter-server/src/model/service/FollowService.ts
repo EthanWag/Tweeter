@@ -1,6 +1,13 @@
 import { User, FakeData, UserDto } from "tweeter-shared";
+import { DyanmoDAOFactory } from "../../DAO/DAOFactories/DynamoDAOFactory";
+import { DAOProvider } from "../../DAO/DAOProvider";
 
 export class FollowService {
+
+  private factory = new DAOProvider(new DyanmoDAOFactory());
+  private followersDAO = this.factory.makeFollowersDAO();
+
+
   public async loadMoreFollowers(
     token: string,
     userAlias: string,
