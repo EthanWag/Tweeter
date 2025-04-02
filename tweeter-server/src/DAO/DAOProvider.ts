@@ -1,11 +1,12 @@
 import { DAOFactory } from "./DAOFactories/DAOFactory";
+import { DyanmoDAOFactory } from "./DAOFactories/DynamoDAOFactory";
 
 export class DAOProvider {
 
     private factory: DAOFactory;
 
-    constructor(factory: DAOFactory) {
-        this.factory = factory;
+    constructor() {
+        this.factory = new DyanmoDAOFactory(); // so you would change this if you wanted to swap databases
     }
 
     public makeUserDAO() {

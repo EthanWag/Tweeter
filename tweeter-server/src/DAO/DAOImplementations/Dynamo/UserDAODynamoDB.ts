@@ -9,30 +9,26 @@ import {
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
+import { DynamoResources } from "./DynamoResources";
 import { UserDAO } from '../../DAOInterfaces/UserDAO';
 import { User } from "tweeter-shared";
 
 import * as dotenv from "dotenv";
 dotenv.config({ path: '../../.env' });
 
-export class UserDAODynamoDB implements UserDAO {
+export class UserDAODynamoDB extends DynamoResources implements UserDAO {
 
     private readonly tableName = "User"; // maybe pull that one out
-    private readonly client = DynamoDBDocumentClient.from(new DynamoDBClient());
     private readonly REGION = process.env.REGION;
     private readonly BUCKET = process.env.BUCKET;
 
     public async getUser(alias: string): Promise<any> {
         throw new Error('Method not implemented.');
     }
+
     public async createUser(alias: string, firstName: string, lastName: string, encryptedPassword: string, userImageBytesString: string, imageExtention: string): Promise<User> {
-
-      console.log(this.BUCKET);
-      console.log(this.REGION);
-
-
         try{
-          await this.doesExists(alias); // will throw an error if a user is already registered
+          await this.doesExistsNot(alias); // will throw an error if a user is already registered
 
           // here we need to be able to store and create the image link
           const filename = this.generateFileName(alias, imageExtention);
@@ -40,7 +36,7 @@ export class UserDAODynamoDB implements UserDAO {
 
           const user = new User(firstName, lastName, alias, userImageLink);
 
-          await this.client.send(
+          await this.dbClientOperation(
             new PutCommand({
                 TableName: this.tableName,
                 Item: {
@@ -50,15 +46,14 @@ export class UserDAODynamoDB implements UserDAO {
                     userImage: user.imageUrl,
                     password: encryptedPassword
                 }
-            })
+            }),
+            "create user"
           );
-          // returns the user if everything went well
           return user;
         }catch(error:any){
-            throw this.errorMessage("create user", (error as Error).message);
+            throw error;
         }
     }
-
 
     public async getPassword(alias: string): Promise<string> {
         throw new Error('Method not implemented.');
@@ -69,31 +64,24 @@ export class UserDAODynamoDB implements UserDAO {
         return alias + "-profile-picture." + imageExtention;
     }
 
-    public async doesExists(alias: string): Promise<void> {
-
-      // maybe pull out this duplication
+    public async doesExistsNot(alias: string): Promise<void> {
       try {
-          const result = await this.client.send(
+          const result = await this.dbClientOperation(
               new GetCommand({
                   TableName: this.tableName,
                   Key: {
                       alias: alias
                   }
-              })
-          );
-          const check = result.Item !== undefined;
-
-          if (check) {
-              throw new Error("User already exists");
+              }),
+              "check if user exists"
+          )
+          // if the user exists, we throw an error
+          if (result.Item !== undefined) {
+              throw new Error(this.errorMessage("check if user exists", "User already exists"));
           }
-
       } catch (error) {
           throw error;
       }
-    }
-
-    public errorMessage(warning:string, error: string): string {
-      return `Failed to ${warning} with error: ${error}`;
     }
 
     private async putImage(

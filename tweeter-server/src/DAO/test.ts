@@ -7,7 +7,12 @@ const main = async () => {
     const service = new FollowService();
     const madeUpUser = new User("userAlias", "firstName", "lastName", "imageUrl");
     
-    await service.follow("token", madeUpUser);
+    try{
+        await service.follow("token", madeUpUser);
+        console.log("followed");
+    }catch(error:any){
+        console.log(error);
+    }
 
 }
 
@@ -26,3 +31,12 @@ main();
         console.log(error);
     }
     */
+
+    /*
+    const service = new FollowService();
+    const madeUpUser = new User("userAlias", "firstName", "lastName", "imageUrl");
+    
+    await service.follow("token", madeUpUser);
+    */
+
+
