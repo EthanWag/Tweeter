@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export class AuthDAODynamoDB extends DynamoResources implements AuthDAO {
 
-    private readonly tableName = "Followers";
+    private readonly tableName = "Session";
 
     public async createAuth(alias: string): Promise<AuthToken> {
         try {
