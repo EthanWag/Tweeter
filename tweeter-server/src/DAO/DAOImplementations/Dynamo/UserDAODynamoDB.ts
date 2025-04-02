@@ -32,7 +32,7 @@ export class UserDAODynamoDB implements UserDAO {
 
 
         try{
-          await this.doesExsist(alias); // will throw an error if a user is already registered
+          await this.doesExists(alias); // will throw an error if a user is already registered
 
           // here we need to be able to store and create the image link
           const filename = this.generateFileName(alias, imageExtention);
@@ -69,7 +69,9 @@ export class UserDAODynamoDB implements UserDAO {
         return alias + "-profile-picture." + imageExtention;
     }
 
-    public async doesExsist(alias: string): Promise<void> {
+    public async doesExists(alias: string): Promise<void> {
+
+      // maybe pull out this duplication
       try {
           const result = await this.client.send(
               new GetCommand({
