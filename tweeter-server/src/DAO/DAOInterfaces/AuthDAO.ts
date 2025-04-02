@@ -3,7 +3,7 @@ import { DAO } from "./DAO";
 
 export interface AuthDAO extends DAO {
 
-    createAuth(token: string, alias: string): Promise<void>;
+    createAuth(alias: string): Promise<AuthToken>;
 
     deleteAuth(token: string): Promise<void>;
 

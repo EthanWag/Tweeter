@@ -1,8 +1,10 @@
-import {AuthToken,User,FakeData} from "tweeter-shared";
+import { AuthToken, User } from "tweeter-shared";
 import { DAOProvider } from "../../DAO/DAOProvider";
 import { UserDAO } from "../../DAO/DAOInterfaces/UserDAO";
 import { AuthDAO } from "../../DAO/DAOInterfaces/AuthDAO";
+
 import { Buffer } from "buffer";
+import argon2 from "argon2";
 
 
 
@@ -20,14 +22,18 @@ export class AuthService {
   // these two functions require data so that's good
   public async login(alias: string,password: string): Promise<[User, AuthToken]>{
 
-    const res = await this.userDAO.getPassword(alias);
+    const encryptedPassword = await this.userDAO.getPassword(alias);
 
-    if (user === null) {
-      throw new Error("Invalid alias or password");
+    // checks the password here, if it is not correct it will throw an error
+    if(!await argon2.verify(encryptedPassword, password)){
+      throw new Error("Invalid password");
     }
-    return [user, FakeData.instance.authToken]; // This one will need to be replaced by a server call
-  };
 
+    const authToken = await this.authDAO.createAuth(alias);
+    const user = await this.userDAO.getUser(alias);
+    
+    return [user, authToken]; // This one will need to be replaced by a server call
+  }
   public async register(
     firstName: string,
     lastName: string,
@@ -39,19 +45,15 @@ export class AuthService {
     const imageStringBase64: string =
       Buffer.from(userImageBytes).toString("base64");
 
-      // lets encrypt the password here
-
-    const user = await this.userDAO.createUser(alias, firstName, lastName, password, imageStringBase64, imageFileExtension);
+    const encryptedPassword = await argon2.hash(password);
+    const user = await this.userDAO.createUser(alias, firstName, lastName, encryptedPassword, imageStringBase64, imageFileExtension);
+    const authToken = await this.authDAO.createAuth(alias);
 
     // you will want to create a better check than this
-
-    // check in the lambda function
-    return [user, FakeData.instance.authToken];
-  };
-
+    return [user, authToken];
+  }
   public async logout(authToken: AuthToken): Promise<void>{
     // Pause so we can see the logging out message. Delete when the call to the server is implemented.
     await new Promise((res) => setTimeout(res, 1000));
-  };
-
+  }
 }
