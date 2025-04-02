@@ -48,7 +48,7 @@ export class FollowService {
   };
 
   public async follow(token: string, userToFollow: User): Promise<[number,number]> {
-    // do logic here that sets the follower count
+    this.followersDAO.addFollower("bot", userToFollow.alias);
     return [0,0];
   }
 

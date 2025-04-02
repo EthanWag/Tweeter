@@ -26,20 +26,16 @@ export class FollowersDAODynamoDB implements FollowersDAO {
         throw new Error('Method not implemented.');
     }
 
-    public async addFollower(alias: string, followerAlias: string): Promise<void> {
-        
-        // This does not make any sense, it just means they don't follow anyone
-        // await this.doesExists(alias);
-
+    public async addFollower(alias: string, followersAlias: string): Promise<void> {
         await this.client.send(
             new PutCommand({
                 TableName: this.tableName,
                 Item: {
                     alias: alias,
-                    followerAlias: followerAlias
+                    followersAlias: followersAlias
                 }
             })
-          );
+        );
     }
 
     public async removeFollower(alias: string, followerAlias: string): Promise<void> {
