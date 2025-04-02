@@ -10,7 +10,6 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
 import { DynamoResources } from "./DynamoResources";
 import { FollowersDAO } from '../../DAOInterfaces/FollowersDAO';
-import { User } from "tweeter-shared";
 
 export class FollowersDAODynamoDB extends DynamoResources implements FollowersDAO {
 
