@@ -2,7 +2,6 @@ import { DAOFactory } from "./DAOFactories/DAOFactory";
 import { DyanmoDAOFactory } from "./DAOFactories/DynamoDAOFactory";
 
 export class DAOProvider {
-
     private factory: DAOFactory;
 
     constructor() {
@@ -15,6 +14,10 @@ export class DAOProvider {
 
     public makeFollowersDAO() {
         return this.factory.createFollowersDAO();
+    }
+
+    public makeAuthDAO() {
+        return this.factory.createAuthDAO();
     }
 
     // add more of these in the future

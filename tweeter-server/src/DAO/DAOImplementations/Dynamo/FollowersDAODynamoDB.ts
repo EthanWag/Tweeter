@@ -35,7 +35,7 @@ export class FollowersDAODynamoDB extends DynamoResources implements FollowersDA
                 throw new Error(this.errorMessage("add follower", "Cannot follow yourself"));
             }
 
-            // already follows this user
+            // already follows this
             if(await this.doesFollow(alias, followersAlias)){
                 return;
             }

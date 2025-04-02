@@ -1,11 +1,19 @@
 import { User, FakeData, UserDto } from "tweeter-shared";
 import { DAOProvider } from "../../DAO/DAOProvider";
+import { FollowersDAO } from "../../DAO/DAOInterfaces/FollowersDAO";
+import { AuthDAO } from "../../DAO/DAOInterfaces/AuthDAO";
 
 export class FollowService {
 
-  private factory = new DAOProvider();
-  private followersDAO = this.factory.makeFollowersDAO();
+  private readonly followersDAO: FollowersDAO;
+  private readonly authDAO: AuthDAO;
 
+  constructor() {
+    const factory = new DAOProvider();
+    this.followersDAO = factory.makeFollowersDAO();
+    this.authDAO = factory.makeAuthDAO();
+
+  }
 
   public async loadMoreFollowers(
     token: string,
@@ -47,12 +55,17 @@ export class FollowService {
   };
 
   public async follow(token: string, userToFollow: User): Promise<[number,number]> {
-    this.followersDAO.addFollower("bot", userToFollow.alias);
+    // first we need to grab the user that is requesting to follow
+    const userAlias = await this.authDAO.getAlias(token);
+    await this.followersDAO.addFollower(userAlias, userToFollow.alias);
+    // we need to get the count of the followers and followees
     return [0,0];
   }
 
   public async unfollow(token: string, userToFollow: User): Promise<[number,number]> {
-    // do logic here that sets the followee count
+    const userAlias = await this.authDAO.getAlias(token);
+    await this.followersDAO.removeFollower(userAlias, userToFollow.alias);
+    // need someway of getting the updated counts
     return [999,999];
   }
 

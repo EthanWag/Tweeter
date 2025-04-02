@@ -1,24 +1,26 @@
 import {AuthToken,User,FakeData} from "tweeter-shared";
-import { UserDAO } from "../../DAO/DAOInterfaces/UserDAO";
-import { UserDAODynamoDB } from "../../DAO/DAOImplementations/Dynamo/UserDAODynamoDB";
-import { Buffer } from "buffer";
 import { DAOProvider } from "../../DAO/DAOProvider";
-import { DyanmoDAOFactory } from "../../DAO/DAOFactories/DynamoDAOFactory";
-import { DAOFactory } from "../../DAO/DAOFactories/DAOFactory";
+import { UserDAO } from "../../DAO/DAOInterfaces/UserDAO";
+import { AuthDAO } from "../../DAO/DAOInterfaces/AuthDAO";
+import { Buffer } from "buffer";
+
+
 
 export class AuthService {
 
-  private userDAO: UserDAO;
+  private readonly userDAO: UserDAO;
+  private readonly authDAO: AuthDAO;
 
   constructor(){
-    const factory = new DAOProvider(new DyanmoDAOFactory());
+    const factory = new DAOProvider();
     this.userDAO = factory.makeUserDAO();
+    this.authDAO = factory.makeAuthDAO();
   }
 
   // these two functions require data so that's good
   public async login(alias: string,password: string): Promise<[User, AuthToken]>{
 
-    const user = FakeData.instance.firstUser; // This one will need to be replaced by a server call
+    const res = await this.userDAO.getPassword(alias);
 
     if (user === null) {
       throw new Error("Invalid alias or password");
@@ -36,6 +38,8 @@ export class AuthService {
   ): Promise<[User, AuthToken]>{
     const imageStringBase64: string =
       Buffer.from(userImageBytes).toString("base64");
+
+      // lets encrypt the password here
 
     const user = await this.userDAO.createUser(alias, firstName, lastName, password, imageStringBase64, imageFileExtension);
 

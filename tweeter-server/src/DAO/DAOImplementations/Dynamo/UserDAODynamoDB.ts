@@ -56,12 +56,23 @@ export class UserDAODynamoDB extends DynamoResources implements UserDAO {
     }
 
     public async getPassword(alias: string): Promise<string> {
-        throw new Error('Method not implemented.');
-    }
-
-    // just makes a name for the user, nothing to crazy
-    private generateFileName(alias: string, imageExtention: string): string {
-        return alias + "-profile-picture." + imageExtention;
+        try {
+            const result = await this.dbClientOperation(
+                new GetCommand({
+                    TableName: this.tableName,
+                    Key: {
+                        alias: alias
+                    }
+                }),
+                "get password"
+            );
+            if (result.Item === undefined) {
+                throw new Error(this.errorMessage("get password", "User does not exist"));
+            }
+            return result.Item.password;
+        } catch (error) {
+            throw error;
+        }
     }
 
     public async doesExistsNot(alias: string): Promise<void> {
@@ -82,6 +93,10 @@ export class UserDAODynamoDB extends DynamoResources implements UserDAO {
       } catch (error) {
           throw error;
       }
+    } 
+
+    private generateFileName(alias: string, imageExtention: string): string {
+        return alias + "-profile-picture." + imageExtention;
     }
 
     private async putImage(
