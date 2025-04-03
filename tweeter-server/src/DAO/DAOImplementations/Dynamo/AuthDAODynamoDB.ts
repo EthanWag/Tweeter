@@ -1,18 +1,14 @@
 import {
     DeleteCommand,
-    DynamoDBDocumentClient,
     GetCommand,
     PutCommand,
     QueryCommand,
-    UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { DynamoResources } from "./DynamoResources";
 
 import { AuthDAO } from '../../DAOInterfaces/AuthDAO';
-import { AuthToken, User } from "tweeter-shared";
+import { AuthToken } from "tweeter-shared";
 import { v4 as uuidv4 } from "uuid";
-
-
 
 export class AuthDAODynamoDB extends DynamoResources implements AuthDAO {
 
@@ -74,8 +70,10 @@ export class AuthDAODynamoDB extends DynamoResources implements AuthDAO {
         }
     }
     public async getAlias(token: string): Promise<string> {
-        try {
 
+        console.log(token);
+
+        try {
             const res = await this.dbClientOperation(
                 new GetCommand({
                     TableName: this.tableName,
@@ -93,6 +91,32 @@ export class AuthDAODynamoDB extends DynamoResources implements AuthDAO {
             throw error;
         }
     }
+    public async isAuthorized(token: string, alias: string): Promise<boolean> {
+        try {
+            const check = await this.dbClientOperation(
+                new QueryCommand({
+                    TableName: this.tableName,
+                    IndexName: "token-alias",
+                    KeyConditionExpression: "token = :token AND alias = :alias",
+                    ExpressionAttributeValues: {
+                        ":token": token,
+                        ":alias": alias
+                    },
+                    Limit: 1
+                }),"is Authorized"
+            );
+            // might be good here to make an index for the token
+
+            // in the future if you wanted to add a is outdated function you could add it here
+            return check.Items.alias === alias;
+
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    // another function could be a an is authorized function that checks if the user is authorized to do the action
+    // have one mainstream function that checks if the user is authorized to do the action
 
     // possbily a does exsist function here
 }

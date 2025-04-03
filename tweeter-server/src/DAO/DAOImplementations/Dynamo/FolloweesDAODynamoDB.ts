@@ -12,11 +12,30 @@ import { FolloweesDAO } from "../../DAOInterfaces/FolloweesDAO";
 
 
 export class FolloweesDAODynamoDB extends DynamoResources implements FolloweesDAO {
+   
 
     private readonly tableName = "Followees";
 
-    getFolloweesCount(alias: string): Promise<number> {
-        throw new Error("Method not implemented.");
+    public async getFolloweesCount(alias: string): Promise<number> {
+        try {
+            const count = await this.dbClientOperation(
+                new QueryCommand({
+                    TableName: this.tableName,
+                    KeyConditionExpression: "alias = :alias",
+                    ExpressionAttributeValues: {
+                        ":alias": alias
+                    },
+                    Select: "COUNT"
+                }),
+                "get followees count"
+            )
+
+            // returns how many items their are
+            return count.Count ?? 0;
+
+        }catch(error){
+            throw error;
+        }  
     }
     getFolloweesPaged(alias: string, lastAlias: string | null, pageNumber: number): Promise<string[]> {
         throw new Error("Method not implemented.");
@@ -51,7 +70,17 @@ export class FolloweesDAODynamoDB extends DynamoResources implements FolloweesDA
             "remove followee"
         )
     }
-    isFollowee(alias: string, followeeAlias: string): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    public async isFollowee(alias: string, followeeAlias: string): Promise<boolean> {
+        const check = await this.dbClientOperation(
+            new GetCommand({
+                TableName: this.tableName,
+                Key: {
+                    alias: alias,
+                    followeeAlias: followeeAlias
+                }
+            }),
+            "is followee"
+        )
+        return check.Item !== undefined;
     }
 }

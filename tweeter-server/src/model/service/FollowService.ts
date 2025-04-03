@@ -42,36 +42,45 @@ export class FollowService {
     return [dtos, hasMore];
   }
 
-  public async getIsFollowerStatus(token: string, user: User, selectedUser: User): Promise<boolean> {
-    // TODO: Replace with the result of calling server
-    return FakeData.instance.isFollower();
-  };
-
   public async getFolloweeCount(token: string,user: User): Promise<number> {
-    // TODO: Replace with the result of calling server
-    return FakeData.instance.getFolloweeCount(user.alias);
+
+    if(!await this.authDAO.isAuthorized(token,user.alias)){
+      throw new Error("Unauthorized");
+    }
+    return await this.followeesDAO.getFolloweesCount(user.alias);
   };
 
   public async getFollowerCount(token: string,user: User): Promise<number>{
-    // TODO: Replace with the result of calling server
-    return FakeData.instance.getFollowerCount(user.alias);
+
+    if(!await this.authDAO.isAuthorized(token,user.alias)){
+      throw new Error("Unauthorized");
+    }
+
+    return await this.followersDAO.getFollowersCount(user.alias);
   };
 
   public async follow(token: string, userToFollow: User): Promise<[number,number]> {
     // first we need to grab the user that is requesting to follow
-    const userAlias = await this.authDAO.getAlias(token);
+    const userAlias = await this.authDAO.getAlias(token); // this will throw an error if the token is invalid
+
     await this.followersDAO.addFollower(userAlias, userToFollow.alias);
     await this.followeesDAO.addFollowee(userToFollow.alias, userAlias);
+    const followerCount = await this.followersDAO.getFollowersCount(userAlias);
+    const followeeCount = await this.followeesDAO.getFolloweesCount(userAlias);
     
-    return [0,0];
+    return [followerCount,followeeCount];
   }
 
   public async unfollow(token: string, userToFollow: User): Promise<[number,number]> {
-    const userAlias = await this.authDAO.getAlias(token);
+
+    const userAlias = await this.authDAO.getAlias(token); // this will throw an error if the token is invalid
+    
     await this.followersDAO.removeFollower(userAlias, userToFollow.alias);
     await this.followeesDAO.removeFollowee(userToFollow.alias, userAlias);
-    
-    return [999,999];
+    const followerCount = await this.followersDAO.getFollowersCount(userAlias);
+    const followeeCount = await this.followeesDAO.getFolloweesCount(userAlias);
+
+    return [followerCount,followeeCount];
   }
 
   public async setIsFollowerStatus(token: string, user: User, selectedUser: User, isFollower: boolean): Promise<void> {
@@ -79,5 +88,8 @@ export class FollowService {
     return;
   }
 
+  public async getIsFollowerStatus(token: string, user: User, selectedUser: User): Promise<boolean> {
+    return FakeData.instance.isFollower();
+  }
 
 }

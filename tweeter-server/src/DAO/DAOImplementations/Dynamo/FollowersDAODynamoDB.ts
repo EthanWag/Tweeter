@@ -6,8 +6,6 @@ import {
     QueryCommand,
     UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-
 import { DynamoResources } from "./DynamoResources";
 import { FollowersDAO } from '../../DAOInterfaces/FollowersDAO';
 
@@ -16,9 +14,28 @@ export class FollowersDAODynamoDB extends DynamoResources implements FollowersDA
     private readonly tableName = "Followers";
 
     public async getFollowersCount(alias: string): Promise<number> {
-        throw new Error('Method not implemented.');
+        // maybe make a count method
+        try {
+            const count = await this.dbClientOperation(
+                new QueryCommand({
+                    TableName: this.tableName,
+                    KeyConditionExpression: "alias = :alias",
+                    ExpressionAttributeValues: {
+                        ":alias": alias
+                    },
+                    Select: "COUNT"
+                }),
+                "get followers count"
+            )
+
+            // returns how many items their are
+            return count.Count ?? 0;
+
+        }catch(error){
+            throw error;
+        }
     }
-    public async getFollowersPaged(alias: string, lastAlias: string | null, pageNumber: number): Promise<string[]> {
+    getFollowersPaged(alias: string, lastAlias: string | null, pageNumber: number): Promise<string[]> {
         throw new Error('Method not implemented.');
     }
     public async addFollower(alias: string, followersAlias: string): Promise<void> {
@@ -48,7 +65,6 @@ export class FollowersDAODynamoDB extends DynamoResources implements FollowersDA
             throw error;
         }
     }
-
     public async doesFollow(alias: string, followerAlias: string): Promise<boolean> {
         try {
             const result = await this.dbClientOperation(
@@ -68,6 +84,19 @@ export class FollowersDAODynamoDB extends DynamoResources implements FollowersDA
         }
     }
     public async removeFollower(alias: string, followerAlias: string): Promise<void> {
-        throw new Error('Method not implemented.');
+        try {
+            await this.dbClientOperation(
+                new DeleteCommand({
+                    TableName: this.tableName,
+                    Key: {
+                        alias: alias,
+                        followersAlias: followerAlias
+                    }
+                }),
+                "remove follower"
+            )
+        }catch(error){
+            throw error;
+        }
     }
 }

@@ -11,4 +11,6 @@ export interface AuthDAO extends DAO {
 
     getAlias(token: string): Promise<string>;
 
+    isAuthorized(token: string,alias:string): Promise<boolean>;
+
 }
