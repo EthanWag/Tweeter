@@ -4,19 +4,6 @@ import { FollowService } from '../model/service/FollowService';
 
 const main = async () => {
 
-    let authService = new AuthService();
-    let followService = new FollowService();
-
-    try{
-        // const val1 = await authService.register("pipper", "boy", "pp", "notpassword", new Uint8Array(0), "png");
-        // const val2 = await authService.register("John", "Doe", "johndoe", "password", new Uint8Array(0), "png");
-        // console.log(val1)
-        // console.log(val2)
-
-        const val3 =  await followService.follow("6851859f-5ea7-47b8-842e-6e0d5950eafc", new User("pipper", "boy", "pp", "https://tweeterbin.s3.us-east-1.amazonaws.com/image/pp-profile-picture.png"));
-    }catch(error:any){
-        console.log(error);
-    }
 }
 
 main();
@@ -43,3 +30,21 @@ main();
     */
 
 
+
+    /*
+
+    let authService = new AuthService();
+    let followService = new FollowService();
+
+    try{
+        // const val1 = await authService.register("pipper", "boy", "pp", "notpassword", new Uint8Array(0), "png");
+        // const val2 = await authService.register("John", "Doe", "johndoe", "password", new Uint8Array(0), "png");
+        // console.log(val1)
+        // console.log(val2)
+
+        const val3 =  await authService.login("johndoe", "differentpassword");
+        console.log(val3)
+    }catch(error:any){
+        console.log(error);
+    }
+    */

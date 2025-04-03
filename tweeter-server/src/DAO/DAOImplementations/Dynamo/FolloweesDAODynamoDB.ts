@@ -49,7 +49,8 @@ export class FolloweesDAODynamoDB extends DynamoResources implements FolloweesDA
                     TableName: this.tableName,
                     Item: {
                         alias: alias,
-                        followeeAlias: followeeAlias
+                        followeeAlias: followeeAlias,
+                        isFollowee: true
                     }
                 }),
                 "add followee"

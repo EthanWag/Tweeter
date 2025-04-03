@@ -71,8 +71,6 @@ export class AuthDAODynamoDB extends DynamoResources implements AuthDAO {
     }
     public async getAlias(token: string): Promise<string> {
 
-        console.log(token);
-
         try {
             const res = await this.dbClientOperation(
                 new GetCommand({
@@ -94,21 +92,16 @@ export class AuthDAODynamoDB extends DynamoResources implements AuthDAO {
     public async isAuthorized(token: string, alias: string): Promise<boolean> {
         try {
             const check = await this.dbClientOperation(
-                new QueryCommand({
+                new GetCommand({
                     TableName: this.tableName,
-                    IndexName: "token-alias",
-                    KeyConditionExpression: "token = :token AND alias = :alias",
-                    ExpressionAttributeValues: {
-                        ":token": token,
-                        ":alias": alias
-                    },
-                    Limit: 1
-                }),"is Authorized"
+                    Key: {
+                        token: token
+                    }
+                }),"check if authorized"
             );
-            // might be good here to make an index for the token
 
             // in the future if you wanted to add a is outdated function you could add it here
-            return check.Items.alias === alias;
+            return check.Item.alias === alias;
 
         } catch (error) {
             throw error;

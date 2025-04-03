@@ -22,8 +22,24 @@ export class UserDAODynamoDB extends DynamoResources implements UserDAO {
     private readonly REGION = process.env.REGION;
     private readonly BUCKET = process.env.BUCKET;
 
-    public async getUser(alias: string): Promise<any> {
-        throw new Error('Method not implemented.');
+    public async getUser(alias: string): Promise<User> {
+        try {
+            const result = await this.dbClientOperation(
+                new GetCommand({
+                    TableName: this.tableName,
+                    Key: {
+                        alias: alias
+                    }
+                }),
+                "get user"
+            );
+            if (result.Item === undefined) {
+                throw new Error(this.errorMessage("get user", "User does not exist"));
+            }
+            return new User(result.Item.firstName, result.Item.lastName, result.Item.alias, result.Item.userImage);
+        } catch (error) {
+            throw error;
+        }
     }
 
     public async createUser(alias: string, firstName: string, lastName: string, encryptedPassword: string, userImageBytesString: string, imageExtention: string): Promise<User> {
