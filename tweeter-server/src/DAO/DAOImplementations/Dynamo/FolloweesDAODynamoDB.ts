@@ -1,19 +1,13 @@
 import {
     DeleteCommand,
-    DynamoDBDocumentClient,
     GetCommand,
     PutCommand,
     QueryCommand,
-    UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
-
 import { DynamoResources } from "./DynamoResources";
 import { FolloweesDAO } from "../../DAOInterfaces/FolloweesDAO";
 
-
 export class FolloweesDAODynamoDB extends DynamoResources implements FolloweesDAO {
-   
-
     private readonly tableName = "Followees";
 
     public async getFolloweesCount(alias: string): Promise<number> {

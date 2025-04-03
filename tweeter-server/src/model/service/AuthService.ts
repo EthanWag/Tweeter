@@ -6,8 +6,6 @@ import { AuthDAO } from "../../DAO/DAOInterfaces/AuthDAO";
 import { Buffer } from "buffer";
 import argon2 from "argon2";
 
-
-
 export class AuthService {
 
   private readonly userDAO: UserDAO;

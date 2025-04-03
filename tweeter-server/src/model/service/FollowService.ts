@@ -1,4 +1,4 @@
-import { User, FakeData, UserDto, isNull } from "tweeter-shared";
+import { User, UserDto } from "tweeter-shared";
 import { DAOProvider } from "../../DAO/DAOProvider";
 import { AuthDAO } from "../../DAO/DAOInterfaces/AuthDAO";
 import { FollowersDAO } from "../../DAO/DAOInterfaces/FollowersDAO";
@@ -27,9 +27,7 @@ export class FollowService {
     lastItem: UserDto | null
   ): Promise<[UserDto[], boolean]> {
 
-    if(!await this.authDAO.isAuthorized(token,userAlias)){
-      throw new Error("Unauthorized");
-    }
+    await this.checkToken(token, userAlias);
 
     const userFollowsAlias = await this.followersDAO.getFollowersPaged(userAlias, lastItem ? lastItem.alias : null, pageSize);
 
@@ -37,7 +35,7 @@ export class FollowService {
     const dtos = await Promise.all(userFollowsAlias!.map(async(alias) => (await this.userDAO.getUser(alias)).dto));
     const hasMore = dtos.length === pageSize;
     return [dtos,hasMore]
-  };
+  }
   
   public async loadMoreFollowees (
     token: string,
@@ -45,31 +43,23 @@ export class FollowService {
     pageSize: number,
     lastItem: UserDto | null
   ): Promise<[UserDto[], boolean]> {
-    return this.getFakeData(lastItem, pageSize, userAlias);
-  };
+    const userFollowsAlias = await this.followeesDAO.getFolloweesPaged(userAlias, lastItem ? lastItem.alias : null, pageSize);
 
-  private async getFakeData(lastItem: UserDto | null, pageSize: number, userAlias: string): Promise<[UserDto[], boolean]> {
-    const [items, hasMore] = FakeData.instance.getPageOfUsers(User.fromDto(lastItem), pageSize, userAlias);
-    const dtos = items.map((user) => user.dto);
-    return [dtos, hasMore];
+    // this is nasty but it should work
+    const dtos = await Promise.all(userFollowsAlias!.map(async(alias) => (await this.userDAO.getUser(alias)).dto));
+    const hasMore = dtos.length === pageSize; // this would cause a problem if there were actually where pageSize items
+    return [dtos,hasMore]
   }
 
   public async getFolloweeCount(token: string,user: User): Promise<number> {
-
-    if(!await this.authDAO.isAuthorized(token,user.alias)){
-      throw new Error("Unauthorized");
-    }
+    await this.checkToken(token,user.alias);
     return await this.followeesDAO.getFolloweesCount(user.alias);
-  };
+  }
 
   public async getFollowerCount(token: string,user: User): Promise<number>{
-
-    if(!await this.authDAO.isAuthorized(token,user.alias)){
-      throw new Error("Unauthorized");
-    }
-
+    await this.checkToken(token,user.alias);
     return await this.followersDAO.getFollowersCount(user.alias);
-  };
+  }
 
   public async follow(token: string, userToFollow: User): Promise<[number,number]> {
     // first we need to grab the user that is requesting to follow
@@ -96,17 +86,20 @@ export class FollowService {
   }
 
   public async setIsFollowerStatus(token: string, user: User, selectedUser: User, isFollower: boolean): Promise<void> {
-    if(!await this.authDAO.isAuthorized(token,user.alias)){
-      throw new Error("Unauthorized");
-    }
+    await this.checkToken(token,user.alias);
     await this.followersDAO.setIsFollower(user.alias, selectedUser.alias, isFollower);
   }
 
   public async getIsFollowerStatus(token: string, user: User, selectedUser: User): Promise<boolean> {
-    if(!await this.authDAO.isAuthorized(token,user.alias)){
+    await this.checkToken(token,user.alias);
+    return await this.followersDAO.doesFollow(user.alias, selectedUser.alias);
+  }
+  // simply just checks to make sure the token is valid
+  private async checkToken(token:string,alias:string): Promise<void> {
+    const isAuthorized = await this.authDAO.isAuthorized(token,alias);
+    if(!isAuthorized){
       throw new Error("Unauthorized");
     }
-    return await this.followersDAO.doesFollow(user.alias, selectedUser.alias);
   }
 
 }
