@@ -4,7 +4,7 @@ import { DAO } from "./DAO";
 // This interface has anything to do with user information in the database
 
 export interface UserDAO extends DAO{
-    getUser(alias: string): Promise<any>; // don't think I want any but it's good for now
+    getUser(alias: string): Promise<User>; // don't think I want any but it's good for now
 
     createUser(
         alias: string,

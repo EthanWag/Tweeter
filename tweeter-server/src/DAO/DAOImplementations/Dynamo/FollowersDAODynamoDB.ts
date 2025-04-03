@@ -6,7 +6,7 @@ import {
     QueryCommand,
     UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
-import { DynamoResources } from "./DynamoResources";
+import { DynamoResources } from './DynamoResources';
 import { FollowersDAO } from '../../DAOInterfaces/FollowersDAO';
 
 export class FollowersDAODynamoDB extends DynamoResources implements FollowersDAO {
@@ -34,8 +34,32 @@ export class FollowersDAODynamoDB extends DynamoResources implements FollowersDA
             throw error;
         }
     }
-    getFollowersPaged(alias: string, lastAlias: string | null, pageNumber: number): Promise<string[]> {
-        throw new Error('Method not implemented.');
+    public async getFollowersPaged(alias: string, lastAlias: string | null, pageNumber: number): Promise<string[]> {
+        try {
+            const result = await this.dbClientOperation(
+                new QueryCommand({
+                    TableName: this.tableName,
+                    KeyConditionExpression: "alias = :alias",
+                    ExpressionAttributeValues: {
+                        ":alias": alias
+                    },
+                    Limit: pageNumber,
+                    ExclusiveStartKey: lastAlias ? { alias, followersAlias: lastAlias } : undefined
+                }),
+                "get followers paged"
+            )
+
+            // typescript gotta type check...
+            const pagedItems:{alias:string,followersAlias:string,isFollower:boolean}[] = result.Items
+
+            return pagedItems.map((item) => item.followersAlias) ?? [];
+
+
+            
+        }catch(error){
+            throw error;
+        }
+
     }
     public async addFollower(alias: string, followersAlias: string): Promise<void> {
         try {

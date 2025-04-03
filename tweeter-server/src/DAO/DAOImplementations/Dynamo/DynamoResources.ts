@@ -5,6 +5,7 @@ import {
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { Command } from "@smithy/smithy-client";
 
+// for the followers and followees tables
 export abstract class DynamoResources {
     protected readonly client = DynamoDBDocumentClient.from(new DynamoDBClient());
 
