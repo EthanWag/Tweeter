@@ -15,9 +15,5 @@ export interface UserDAO extends DAO{
         imageExtention: string
     ): Promise<User>; // throw an error if things go wrong???
 
-    // does exist?
-
-    // delete user?
-
     getPassword(alias: string): Promise<string>;
 }

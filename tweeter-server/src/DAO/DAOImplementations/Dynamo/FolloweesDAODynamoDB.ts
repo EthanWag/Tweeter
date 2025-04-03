@@ -31,7 +31,7 @@ export class FolloweesDAODynamoDB extends DynamoResources implements FolloweesDA
             throw error;
         }  
     }
-    public async getFolloweesPaged(alias: string, lastAlias: string | null, pageNumber: number): Promise<string[]> {
+    public async getFolloweesPaged(alias: string, lastAlias: string | null, pageNumber?: number): Promise<string[]> {
         try {
             const result = await this.dbClientOperation(
                 new QueryCommand({

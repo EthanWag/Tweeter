@@ -18,7 +18,11 @@ export class DAOProvider {
     }
     public makeFolloweesDAO() {
         return this.factory.createFolloweesDAO();
-    } 
+    }
+
+    public makePostDAO() {
+        return this.factory.createPostDAO();
+    }
 
     // add more of these in the future
 }
