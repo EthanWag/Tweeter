@@ -41,14 +41,14 @@ export class FolloweesDAODynamoDB extends DynamoResources implements FolloweesDA
                         ":alias": alias
                     },
                     Limit: pageNumber,
-                    ExclusiveStartKey: lastAlias ? { alias, followersAlias: lastAlias } : undefined
+                    ExclusiveStartKey: lastAlias ? { alias, followeesAlias: lastAlias } : undefined
                 }),
-                "get followers paged"
+                "get followees paged"
             )
 
-            const pagedItems:{alias:string,followeesAlias:string,isFollower:boolean}[] = result.Items
+            const pagedItems:{alias:string,followeeAlias:string,isFollowee:boolean}[] = result.Items
 
-            return pagedItems.map((item) => item.followeesAlias) ?? [];
+            return pagedItems.map((item) => item.followeeAlias) ?? [];
         }catch(error){
             throw error;
         }

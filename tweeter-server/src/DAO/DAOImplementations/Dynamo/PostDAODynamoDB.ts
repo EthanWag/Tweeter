@@ -5,7 +5,7 @@ import {
     QueryCommand,
 } from "@aws-sdk/lib-dynamodb";
 
-import { Status, isNull } from "tweeter-shared";
+import { Status, User, isNull } from "tweeter-shared";
 import { PostDAO } from "../../DAOInterfaces/PostDAO";
 import { DynamoResources } from "./DynamoResources";
 
@@ -37,13 +37,15 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
             // now we need to add this post to every single feed of all their followers, ugh
 
             // oof will take a long time
-            for(let i = 0; i < followeeList.length; i++){
-                const followeeAlias = followeeList[i];
+            followeeList.forEach(async (followeeAlias) => {
+                console.log(followeeAlias);
+
                 await this.dbClientOperation(
                     new PutCommand({
                         TableName: this.FeedTable,
                         Item: {
-                            alias: followeeAlias,
+                            followeeAlias: followeeAlias,
+                            alias: alias,
                             timestamp: newStatus.timestamp,
                             post: newStatus.post,
 
@@ -56,7 +58,7 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
                     }),
                     "putting post into feed"
                 )
-            }
+            });
 
         }catch(error){
             throw error // just rethrow it, other functions handle message spesfics
@@ -112,7 +114,17 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
         if(isNull(userPosts)) return [];
 
         // convert userPosts into actual status
-        const posts: Status[] = userPosts.Items.map((item:{post:string,timestamp:number,authorAlias:string,authorFirstName:string,authorLastName:string,authorImage:string}) => ({
+        const posts: Status[] = userPosts.Items.map((item:{post:string,timestamp:number,authorAlias:string,authorFirstName:string,authorLastName:string,authorImage:string}) => {
+            return new Status(item.post, new User(item.authorFirstName, item.authorLastName, item.authorAlias, item.authorImage), item.timestamp);
+        });
+        return posts;
+    }
+
+    /*
+
+     ({
+
+
             post: item.post,
             timestamp: item.timestamp,
             user: {
@@ -123,7 +135,6 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
             },
         })) as Status[];
 
-        return posts;
-    }
+    */
     
 }
