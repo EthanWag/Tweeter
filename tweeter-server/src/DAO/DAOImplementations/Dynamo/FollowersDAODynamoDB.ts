@@ -10,7 +10,6 @@ import { DynamoResources } from "./DynamoResources";
 import { FollowersDAO } from '../../DAOInterfaces/FollowersDAO';
 
 export class FollowersDAODynamoDB extends DynamoResources implements FollowersDAO {
-
     private readonly tableName = "Followers";
 
     public async getFollowersCount(alias: string): Promise<number> {
@@ -56,7 +55,8 @@ export class FollowersDAODynamoDB extends DynamoResources implements FollowersDA
                     TableName: this.tableName,
                     Item: {
                         alias: alias,
-                        followersAlias: followersAlias
+                        followersAlias: followersAlias,
+                        isFollower: true
                     }
                 }),
                 "add follower"
@@ -78,7 +78,30 @@ export class FollowersDAODynamoDB extends DynamoResources implements FollowersDA
                 "does follow"
             );
 
-            return result.Item !== undefined;
+            // if the relationship hasn't been created yet,than we know it's false
+            if(!result.Item) return false;
+
+            return result.Item.isFollower
+        }catch(error){
+            throw error;
+        }
+    }
+    public async setIsFollower(alias: string, followerAlias: string, isFollower: boolean): Promise<void> {
+        try {
+            await this.dbClientOperation(
+                new UpdateCommand({
+                    TableName: this.tableName,
+                    Key: {
+                        alias: alias,
+                        followersAlias: followerAlias
+                    },
+                    UpdateExpression: "SET isFollower = :isFollower",
+                    ExpressionAttributeValues: {
+                        ":isFollower": isFollower
+                    }
+                }),
+                "set is follower"
+            )
         }catch(error){
             throw error;
         }

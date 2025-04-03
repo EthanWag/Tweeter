@@ -84,12 +84,17 @@ export class FollowService {
   }
 
   public async setIsFollowerStatus(token: string, user: User, selectedUser: User, isFollower: boolean): Promise<void> {
-    // do logic here that sets the isFollower status
-    return;
+    if(!await this.authDAO.isAuthorized(token,user.alias)){
+      throw new Error("Unauthorized");
+    }
+    await this.followersDAO.setIsFollower(user.alias, selectedUser.alias, isFollower);
   }
 
   public async getIsFollowerStatus(token: string, user: User, selectedUser: User): Promise<boolean> {
-    return FakeData.instance.isFollower();
+    if(!await this.authDAO.isAuthorized(token,user.alias)){
+      throw new Error("Unauthorized");
+    }
+    return await this.followersDAO.doesFollow(user.alias, selectedUser.alias);
   }
 
 }

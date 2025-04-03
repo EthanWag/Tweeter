@@ -11,4 +11,6 @@ export interface FollowersDAO extends DAO{
     removeFollower(alias: string, followerAlias: string): Promise<void>;
 
     doesFollow(alias: string, followerAlias: string): Promise<boolean>;
+
+    setIsFollower(alias: string, followerAlias: string, isFollower: boolean): Promise<void>;
 }
