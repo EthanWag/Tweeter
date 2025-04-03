@@ -37,8 +37,27 @@ export class FolloweesDAODynamoDB extends DynamoResources implements FolloweesDA
             throw error;
         }  
     }
-    getFolloweesPaged(alias: string, lastAlias: string | null, pageNumber: number): Promise<string[]> {
-        throw new Error("Method not implemented.");
+    public async getFolloweesPaged(alias: string, lastAlias: string | null, pageNumber: number): Promise<string[]> {
+        try {
+            const result = await this.dbClientOperation(
+                new QueryCommand({
+                    TableName: this.tableName,
+                    KeyConditionExpression: "alias = :alias",
+                    ExpressionAttributeValues: {
+                        ":alias": alias
+                    },
+                    Limit: pageNumber,
+                    ExclusiveStartKey: lastAlias ? { alias, followersAlias: lastAlias } : undefined
+                }),
+                "get followers paged"
+            )
+
+            const pagedItems:{alias:string,followeesAlias:string,isFollower:boolean}[] = result.Items
+
+            return pagedItems.map((item) => item.followeesAlias) ?? [];
+        }catch(error){
+            throw error;
+        }
     }
     public async addFollowee(alias: string, followeeAlias: string): Promise<void> {
         try {

@@ -18,8 +18,6 @@ const main = async () => {
         //const val3 =  await followService.follow(val1[1].token,val2[0])
         //console.log(val3)
 
-        const val4 = await followService.loadMoreFollowers(token, "pp", 10, null);
-        // console.log(val4);
 
 
     }catch(error:any){
@@ -70,3 +68,13 @@ main();
         console.log(error);
     }
     */
+
+
+        /*
+        const val4 = await followService.loadMoreFollowers(token, "pp", 10, null);
+
+        const val5 = await followService.loadMoreFollowers(token, "pp", 10, val4[0][val4[0].length - 1]);
+        console.log(val4);
+        console.log("done with first round");
+        console.log(val5);
+        */

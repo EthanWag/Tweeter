@@ -1,6 +1,5 @@
 import {
     DeleteCommand,
-    DynamoDBDocumentClient,
     GetCommand,
     PutCommand,
     QueryCommand,
@@ -54,8 +53,6 @@ export class FollowersDAODynamoDB extends DynamoResources implements FollowersDA
 
             return pagedItems.map((item) => item.followersAlias) ?? [];
 
-
-            
         }catch(error){
             throw error;
         }

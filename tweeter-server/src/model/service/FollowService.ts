@@ -1,4 +1,4 @@
-import { User, FakeData, UserDto } from "tweeter-shared";
+import { User, FakeData, UserDto, isNull } from "tweeter-shared";
 import { DAOProvider } from "../../DAO/DAOProvider";
 import { AuthDAO } from "../../DAO/DAOInterfaces/AuthDAO";
 import { FollowersDAO } from "../../DAO/DAOInterfaces/FollowersDAO";
@@ -18,7 +18,6 @@ export class FollowService {
     this.followersDAO = factory.makeFollowersDAO();
     this.followeesDAO = factory.makeFolloweesDAO();
     this.authDAO = factory.makeAuthDAO();
-
   }
 
   public async loadMoreFollowers(
@@ -35,7 +34,7 @@ export class FollowService {
     const userFollowsAlias = await this.followersDAO.getFollowersPaged(userAlias, lastItem ? lastItem.alias : null, pageSize);
 
     // this is nasty but it should work
-    const dtos = await Promise.all(userFollowsAlias.map(async(alias) => (await this.userDAO.getUser(alias)).dto));
+    const dtos = await Promise.all(userFollowsAlias!.map(async(alias) => (await this.userDAO.getUser(alias)).dto));
     const hasMore = dtos.length === pageSize;
     return [dtos,hasMore]
   };
