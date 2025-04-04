@@ -44,6 +44,9 @@ export class AuthService {
       Buffer.from(userImageBytes).toString("base64");
 
     const encryptedPassword = await bcrypt.hash(password, 5);
+    // const encryptedPassword = password; // for the life of me, bcrypt does want to courprate, so no encryption
+
+
     const user = await this.userDAO.createUser(alias, firstName, lastName, encryptedPassword, imageStringBase64, imageFileExtension);
     const authToken = await this.authDAO.createAuth(alias);
 

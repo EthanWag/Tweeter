@@ -38,8 +38,6 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
 
             // oof will take a long time
             followeeList.forEach(async (followeeAlias) => {
-                console.log(followeeAlias);
-
                 await this.dbClientOperation(
                     new PutCommand({
                         TableName: this.FeedTable,

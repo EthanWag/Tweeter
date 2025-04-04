@@ -11,15 +11,23 @@ const main = async () => {
     let postService = new PostsService();
     let statusService = new StatusService();
 
-    const token = "f3347747-bb0d-48c2-ade6-5fbd501bec1a"
-    const feedToken = "77059278-49ca-4e67-89da-ded77c49b2d9"
-
     try{
-        //const val1 = await authService.register("pipper", "boy", "pp", "notpassword", new Uint8Array(0), "png");
-        //const val2 = await authService.register("John", "Doe", "johndoe", "password", new Uint8Array(0), "png");
+      
+        const val1 = await authService.register("Peter", "Griffin", "@BrianTheDog", "roadhouse", new Uint8Array(1), "png");
+        // const val2 = await authService.register("Luke", "Skywalker", "@JediLover", "R2D2", new Uint8Array(4), "png");
+        for(let i = 0; i < 30; i++){
+            let hmmmmmmmmmmm = ""
+            for(let j = 0; j < i; j++){
+                hmmmmmmmmmmm += "!"
+            }
+
+            postService.postStatus(val1[1].token, new Status("Shutup Meg" + hmmmmmmmmmmm, new User("Peter", "Griffin", "@BrianTheDog", "imageUrl"), i * 4 / 2 - 17));
+        }
+
         //console.log(val1)
         //console.log(val2)
 
+        /*
         for(let i = 0; i < 15; i++){
             const status = new Status("This is a test post",new User("Doe", "John", "johndoe", "imageUrl"),85 + i);
             await postService.postStatus(token,status);
@@ -29,6 +37,7 @@ const main = async () => {
         console.log(val3);
         const val4 =  await statusService.loadMoreFeedItems(feedToken, "pp", 10, null);
         console.log(val4);
+        */
 
 
     }catch(error:any){

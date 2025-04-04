@@ -17,8 +17,8 @@ import { User } from "tweeter-shared";
 export class UserDAODynamoDB extends DynamoResources implements UserDAO {
 
     private readonly tableName = "User"; // maybe pull that one out
-    private readonly REGION = process.env.REGION;
-    private readonly BUCKET = process.env.BUCKET;
+    private readonly REGION = "us-east-1";
+    private readonly BUCKET = "tweeterbin";
 
     public async getUser(alias: string): Promise<User> {
         try {

@@ -37,11 +37,13 @@ const ItemScroller = <T extends User | Status,V extends PagedItemView<T>,S,P ext
   }, [displayedUser]);
 
   // Load initial items whenever the displayed user changes. Done in a separate useEffect hook so the changes from reset will be visible.
+  
   useEffect(() => {
     if(changedDisplayedUser) {
       loadMoreItems();
     }
   }, [changedDisplayedUser]);
+  
 
   // Add new items whenever there are new items to add
   useEffect(() => {
