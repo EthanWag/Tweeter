@@ -6,15 +6,13 @@ import {
     QueryCommand,
     UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 import { DynamoResources } from "./DynamoResources";
 import { UserDAO } from '../../DAOInterfaces/UserDAO';
 import { User } from "tweeter-shared";
 
-import * as dotenv from "dotenv";
-dotenv.config({ path: '../../.env' });
+
 
 export class UserDAODynamoDB extends DynamoResources implements UserDAO {
 

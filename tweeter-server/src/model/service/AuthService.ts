@@ -4,7 +4,7 @@ import { UserDAO } from "../../DAO/DAOInterfaces/UserDAO";
 import { AuthDAO } from "../../DAO/DAOInterfaces/AuthDAO";
 
 import { Buffer } from "buffer";
-import argon2 from "argon2";
+import  bcrypt  from "bcryptjs"
 
 export class AuthService {
 
@@ -23,7 +23,7 @@ export class AuthService {
     const encryptedPassword = await this.userDAO.getPassword(alias);
 
     // checks the password here, if it is not correct it will throw an error
-    if(!await argon2.verify(encryptedPassword, password)){
+    if(!await bcrypt.compare(password, encryptedPassword)){
       throw new Error("Invalid password");
     }
 
@@ -43,7 +43,7 @@ export class AuthService {
     const imageStringBase64: string =
       Buffer.from(userImageBytes).toString("base64");
 
-    const encryptedPassword = await argon2.hash(password);
+    const encryptedPassword = await bcrypt.hash(password, 5);
     const user = await this.userDAO.createUser(alias, firstName, lastName, encryptedPassword, imageStringBase64, imageFileExtension);
     const authToken = await this.authDAO.createAuth(alias);
 
