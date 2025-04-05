@@ -18,7 +18,10 @@ export class AuthDAODynamoDB extends DynamoResources implements AuthDAO {
         try {
             // maybe check to see if they are already authenticated?
 
-            const authToken = new AuthToken(uuidv4(), Date.now());
+            const now = Math.floor(Date.now()/1000);
+            const ttl = now + (60 * 60) * 2; // 1 hour to live
+
+            const authToken = new AuthToken(uuidv4(), now);
 
             await this.dbClientOperation(
                 new PutCommand({
@@ -26,7 +29,8 @@ export class AuthDAODynamoDB extends DynamoResources implements AuthDAO {
                     Item: {
                         token: authToken.token,
                         alias: alias,
-                        timestamp:authToken.timestamp
+                        timestamp:authToken.timestamp,
+                        expiresAt: ttl,
                     }
                 }),"create Auth"
             );
