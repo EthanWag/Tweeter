@@ -11,6 +11,7 @@ import { DynamoResources } from "./DynamoResources";
 
 export class PostDAODynamoDB extends DynamoResources implements PostDAO {
 
+
     private readonly FeedTable = "Feed";
     private readonly StoryTable = "Story";
 
@@ -64,6 +65,34 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
         }
     }
 
+    public async addToFeed(post: Status, alias: string, followeeAlias: string[]): Promise<void> {
+        try{
+            followeeAlias.forEach(async (followeeAlias) => {
+                await this.dbClientOperation(
+                    new PutCommand({
+                        TableName: this.FeedTable,
+                        Item: {
+                            followeeAlias: followeeAlias,
+                            alias: alias,
+                            timestamp: post.timestamp,
+                            post: post.post,
+
+                            // info about the user who posted the story
+                            authorAlias: post.user.alias,
+                            authorFirstName: post.user.firstName,
+                            authorLastName: post.user.lastName,
+                            authorImage: post.user.imageUrl
+                        },
+                    }),
+                    "putting post into feed"
+                )
+            });
+        }catch(error){
+            throw error
+        }
+    }
+
+    // come back around to this, It might be helpful in the future
     getMostRecentPost(alias: string): Promise<Status> {
         throw new Error("Method not implemented.");
     }
@@ -110,7 +139,6 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
         return this.convertItemsToStatus(userFeed);
     }
 
-    // kinda spotty code because we are using any, so be sure to check to make sure this works properly...
     private convertItemsToStatus(userPosts:any): Status[] {
 
         if(isNull(userPosts)) return [];
