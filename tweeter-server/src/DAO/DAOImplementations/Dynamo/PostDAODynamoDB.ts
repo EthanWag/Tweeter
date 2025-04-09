@@ -15,7 +15,7 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
     private readonly StoryTable = "Story";
 
 
-    public async addToStory(alias: string, newStatus: Status,followeeList:string[]): Promise<void> {
+    public async addToStory(alias: string, newStatus: Status): Promise<void> {
         try{
             await this.dbClientOperation(
                 new PutCommand({
@@ -34,8 +34,8 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
                 }),
                 "putting post into story"
             )
-            // now we need to add this post to every single feed of all their followers, ugh
-
+            // TODO: remove this code and put it in a seprate functiion for implementation
+            /*
             // oof will take a long time
             followeeList.forEach(async (followeeAlias) => {
                 await this.dbClientOperation(
@@ -57,14 +57,17 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
                     "putting post into feed"
                 )
             });
+            */
 
         }catch(error){
-            throw error // just rethrow it, other functions handle message spesfics
+            throw error
         }
     }
+
     getMostRecentPost(alias: string): Promise<Status> {
         throw new Error("Method not implemented.");
     }
+    
     public async getStoryPaged(alias: string, lastPost: Status | null, pageNumber: number): Promise<Status[]> {
         try{
             const userPosts = await this.dbClientOperation(
@@ -86,6 +89,7 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
             throw error
         }
     }
+
     public async getFeedPaged(alias: string, lastPost: Status | null, pageNumber: number): Promise<Status[]> {
 
         const followeeAlias = alias;
@@ -117,22 +121,4 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
         });
         return posts;
     }
-
-    /*
-
-     ({
-
-
-            post: item.post,
-            timestamp: item.timestamp,
-            user: {
-                alias: item.authorAlias,
-                firstName: item.authorFirstName,
-                lastName: item.authorLastName,
-                imageUrl: item.authorImage,
-            },
-        })) as Status[];
-
-    */
-    
 }

@@ -4,6 +4,7 @@ import { AuthDAO } from "../../DAO/DAOInterfaces/AuthDAO";
 import { FollowersDAO } from "../../DAO/DAOInterfaces/FollowersDAO";
 import { FolloweesDAO } from "../../DAO/DAOInterfaces/FolloweesDAO";
 import { UserDAO } from "../../DAO/DAOInterfaces/UserDAO";
+import { ServiceResources } from "./ServiceResources";
 
 export class FollowService {
 
@@ -11,6 +12,7 @@ export class FollowService {
   private readonly followersDAO: FollowersDAO;
   private readonly followeesDAO: FolloweesDAO;
   private readonly authDAO: AuthDAO;
+  private readonly serverResources: ServiceResources;
 
   constructor() {
     const factory = new DAOProvider();
@@ -18,6 +20,8 @@ export class FollowService {
     this.followersDAO = factory.makeFollowersDAO();
     this.followeesDAO = factory.makeFolloweesDAO();
     this.authDAO = factory.makeAuthDAO();
+
+    this.serverResources = new ServiceResources();
   }
 
   public async loadMoreFollowers(
@@ -27,7 +31,7 @@ export class FollowService {
     lastItem: UserDto | null
   ): Promise<[UserDto[], boolean]> {
 
-    await this.checkToken(token, userAlias);
+    await this.serverResources.checkAuth(token, userAlias);
 
     const userFollowsAlias = await this.followersDAO.getFollowersPaged(userAlias, lastItem ? lastItem.alias : null, pageSize);
 
@@ -52,12 +56,12 @@ export class FollowService {
   }
 
   public async getFolloweeCount(token: string,user: User): Promise<number> {
-    await this.checkToken(token,user.alias);
+    await this.serverResources.checkAuth(token,user.alias);
     return await this.followeesDAO.getFolloweesCount(user.alias);
   }
 
   public async getFollowerCount(token: string,user: User): Promise<number>{
-    await this.checkToken(token,user.alias);
+    await this.serverResources.checkAuth(token,user.alias);
     return await this.followersDAO.getFollowersCount(user.alias);
   }
 
@@ -86,20 +90,12 @@ export class FollowService {
   }
 
   public async setIsFollowerStatus(token: string, user: User, selectedUser: User, isFollower: boolean): Promise<void> {
-    await this.checkToken(token,user.alias);
+    await this.serverResources.checkAuth(token,user.alias);
     await this.followersDAO.setIsFollower(user.alias, selectedUser.alias, isFollower);
   }
 
   public async getIsFollowerStatus(token: string, user: User, selectedUser: User): Promise<boolean> {
-    await this.checkToken(token,user.alias);
+    await this.serverResources.checkAuth(token,user.alias);
     return await this.followersDAO.doesFollow(user.alias, selectedUser.alias);
   }
-  // simply just checks to make sure the token is valid
-  private async checkToken(token:string,alias:string): Promise<void> {
-    const isAuthorized = await this.authDAO.isAuthorized(token,alias);
-    if(!isAuthorized){
-      throw new Error("Unauthorized");
-    }
-  }
-
 }

@@ -1,17 +1,18 @@
 import { StatusDto, Status} from "tweeter-shared";
 import { DAOProvider } from "../../DAO/DAOProvider";
 import { PostDAO } from "../../DAO/DAOInterfaces/PostDAO";
-import { AuthDAO } from "../../DAO/DAOInterfaces/AuthDAO";
+import { ServiceResources } from './ServiceResources';
 
 export class StatusService {
 
   private readonly postDAO: PostDAO;
-  private readonly authDAO: AuthDAO;
+  private readonly serviceResources: ServiceResources;
 
   constructor() {
     const factory = new DAOProvider();
     this.postDAO = factory.makePostDAO();
-    this.authDAO = factory.makeAuthDAO();
+
+    this.serviceResources = new ServiceResources();
   }
 
   public async loadMoreFeedItems (
@@ -21,7 +22,7 @@ export class StatusService {
     lastItem: StatusDto | null // we need to make a status dto
   ): Promise<[StatusDto[], boolean]> {
     
-    await this.checkToken(authToken, alias);
+    await this.serviceResources.checkAuth(authToken, alias);
 
     const last = lastItem ? Status.fromDto(lastItem) : null;
 
@@ -39,7 +40,7 @@ export class StatusService {
     lastItem: StatusDto | null
   ): Promise<[StatusDto[], boolean]> {
 
-    await this.checkToken(authToken, alias);
+    await this.serviceResources.checkAuth(authToken, alias);
     const last = lastItem ? Status.fromDto(lastItem) : null;
 
     const story = await this.postDAO.getStoryPaged(alias, last, pageSize);
@@ -48,10 +49,4 @@ export class StatusService {
 
     return [dtos, hasMore];
   };
-  private async checkToken(token:string,alias:string): Promise<void> {
-    const isAuthorized = await this.authDAO.isAuthorized(token,alias);
-    if(!isAuthorized){
-      throw new Error("Unauthorized");
-    }
-  }
 }

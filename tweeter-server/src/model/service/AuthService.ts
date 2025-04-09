@@ -53,6 +53,8 @@ export class AuthService {
     // you will want to create a better check than this
     return [user, authToken];
   }
+
+  // pretty sure I need a lambda for this
   public async logout(authToken: AuthToken): Promise<void>{
     // go back to how it was before
     await this.authDAO.deleteAuth(authToken.token);
