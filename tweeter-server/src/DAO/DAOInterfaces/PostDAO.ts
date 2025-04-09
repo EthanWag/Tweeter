@@ -3,7 +3,7 @@ import { DAO } from "./DAO";
 
 export interface PostDAO extends DAO{
 
-    post(alias:string,newStatus:Status,followeeList:string[]): Promise<void>;
+    addToStory(alias:string,newStatus:Status,followeeList:string[]): Promise<void>;
 
     getMostRecentPost(alias:string): Promise<Status>;
 

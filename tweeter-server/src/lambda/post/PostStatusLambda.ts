@@ -12,7 +12,7 @@ export const handler = async (request: PostStatusRequest): Promise<IsValidRespon
     }
 
     const postService = new PostsService(); 
-    await postService.postStatus(request.token, Status.fromDto(request.user)!);
+    await postService.addToStory(request.token, Status.fromDto(request.user)!);
 
     return {
         success: true,

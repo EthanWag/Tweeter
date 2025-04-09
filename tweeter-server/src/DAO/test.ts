@@ -21,7 +21,7 @@ const main = async () => {
                 hmmmmmmmmmmm += "!"
             }
 
-            postService.postStatus(val1[1].token, new Status("Shutup Meg" + hmmmmmmmmmmm, new User("Peter", "Griffin", "@BrianTheDog", "imageUrl"), i * 4 / 2 - 17));
+            postService.addToStory(val1[1].token, new Status("Shutup Meg" + hmmmmmmmmmmm, new User("Peter", "Griffin", "@BrianTheDog", "imageUrl"), i * 4 / 2 - 17));
         }
 
         //console.log(val1)

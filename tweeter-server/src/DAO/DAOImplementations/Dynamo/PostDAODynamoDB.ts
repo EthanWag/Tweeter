@@ -15,7 +15,7 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
     private readonly StoryTable = "Story";
 
 
-    public async post(alias: string, newStatus: Status,followeeList:string[]): Promise<void> {
+    public async addToStory(alias: string, newStatus: Status,followeeList:string[]): Promise<void> {
         try{
             await this.dbClientOperation(
                 new PutCommand({

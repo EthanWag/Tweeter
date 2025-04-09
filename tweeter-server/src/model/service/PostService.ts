@@ -30,12 +30,18 @@ export class PostsService {
         
     }
 
-    public async postStatus(authToken: string,newStatus: Status): Promise<void> {
-        const alias = await this.authDAO.getAlias(authToken);
-        if(alias === null) throw new Error("Invalid auth token");
+    public async addToStory(authToken: string,newStatus: Status): Promise<void> {
+        const alias = await this.authDAO.getAlias(authToken); 
+        if(alias === null) throw new Error("Invalid auth token"); // pull out duplicate logic
 
         const followees = await this.followeeDAO.getFolloweesPaged(alias,null);
-        await this.postDAO.post(alias,newStatus,followees);
+        await this.postDAO.addToStory(alias,newStatus,followees);
     }
 
+    // have this functio add items to a feed
+    public async addToFeed(newStatus: Status, followeeAlias: string[]): Promise<void> {
+
+    } // after that we are done
+
+    
 }
