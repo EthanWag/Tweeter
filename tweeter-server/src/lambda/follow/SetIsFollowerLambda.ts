@@ -1,4 +1,4 @@
-import { IsFollowRequest, IsValidResponse, User, isNull, SetIsFollowerRequest } from 'tweeter-shared';
+import { IsValidResponse, User, isNull, SetIsFollowerRequest } from 'tweeter-shared';
 import { FollowService } from "../../model/service/FollowService";
 
 export const handler = async (request: SetIsFollowerRequest): Promise<IsValidResponse> => {

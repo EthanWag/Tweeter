@@ -14,7 +14,7 @@ export class ServiceResources {
 
         const isAuthorized = await this.authDAO.isAuthorized(token,alias);
         if(!isAuthorized){
-        throw new Error("Unauthorized");
+          throw new Error("Unauthorized");
         }
     }
 }

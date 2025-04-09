@@ -1,9 +1,9 @@
 import { GetUserRequest, GetUserResponse, isNull } from "tweeter-shared";
-import { PostsService } from "../../model/service/PostService";
+import { StatusService } from "../../model/service/StatusService";
 
 export const handler = async (request: GetUserRequest): Promise<GetUserResponse> => {
 
-    const postService = new PostsService(); 
+    const postService = new StatusService(); 
     const user = await postService.getPosts(request.alias);
 
     const validUser = !isNull(user);
