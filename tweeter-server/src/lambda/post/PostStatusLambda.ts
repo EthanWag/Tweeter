@@ -1,5 +1,9 @@
-import { PostStatusRequest, IsValidResponse, isNull, Status } from "tweeter-shared";
+import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
+
+import { PostStatusRequest, PostRequest, IsValidResponse, isNull, Status } from "tweeter-shared";
 import { StatusService } from "../../model/service/StatusService";
+
+const POSTQUEUE = 'https://sqs.us-east-1.amazonaws.com/324037310840/TweeterPostQueue'
 
 export const handler = async (request: PostStatusRequest): Promise<IsValidResponse> => {
 
@@ -14,13 +18,22 @@ export const handler = async (request: PostStatusRequest): Promise<IsValidRespon
     const postService = new StatusService(); 
     await postService.addToStory(request.token, Status.fromDto(request.user)!);
 
-    // here you need to post to the queue
-    // TODO: this is where you would call the queue 
+    // 1. Create an SQS client
+    const sqsClient = new SQSClient();
+
+    const params = {
+        QueueUrl: POSTQUEUE,
+        MessageBody: JSON.stringify({
+                alias: request.user.user.alias,
+                post: request.user
+            }),
+    };
+
+    await sqsClient.send(new SendMessageCommand(params));
 
     return {
         success: true,
         message: null,
         valid: true
-
     }
 }
