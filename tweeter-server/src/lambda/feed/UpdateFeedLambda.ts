@@ -6,7 +6,7 @@ import { StatusService } from '../../model/service/StatusService';
 export const handler = async (request:FeedRequest) => {
 
     if (!request.post) {
-        throw new Error("No post provided");
+        throw new Error("No post provided");  
     }
 
     const service = new StatusService();
