@@ -38,6 +38,9 @@ export type { GetUserResponse } from "./model/net/response/GetUserResponse";
 export type { AuthPassResponse } from "./model/net/response/AuthPassResponse";
 export type { FollowResponse } from "./model/net/response/FollowResponse";
 
+export type { PostRequest } from "./model/net/request/PostRequest";
+export type { FeedRequest } from "./model/net/request/FeedRequest";
+
 // Take data for testing
 export { FakeData } from "./util/FakeData";
 
