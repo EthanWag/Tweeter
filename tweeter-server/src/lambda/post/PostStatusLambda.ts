@@ -1,6 +1,6 @@
 import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
 
-import { PostStatusRequest, PostRequest, IsValidResponse, isNull, Status } from "tweeter-shared";
+import { PostStatusRequest, IsValidResponse, isNull, Status } from "tweeter-shared";
 import { StatusService } from "../../model/service/StatusService";
 
 const POSTQUEUE = 'https://sqs.us-east-1.amazonaws.com/324037310840/TweeterPostQueue'

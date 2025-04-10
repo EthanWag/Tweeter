@@ -3,14 +3,26 @@ import { StatusService } from '../../model/service/StatusService';
 
 // 7. this lambda should recieve a list of users and a post
 // type should be [User[],Status], possibly an authToken(try not to)
-export const handler = async (request:FeedRequest) => {
+export const handler = async (event:any) => {
 
-    if (!request.post) {
-        throw new Error("No post provided");  
+    try{
+
+        event.Records.forEach(async(record:any) => {
+
+            const request:FeedRequest = JSON.parse(record.body);
+
+            if (!request.post) {
+                throw new Error("No post provided");  
+            }
+        
+            const service = new StatusService();
+            service.addToFeed(Status.fromDto(request.post)!, request.followeesAlias);
+
+        });
+
+    }catch(error){
+        console.error("Error processing SQS message:", error);
     }
-
-    const service = new StatusService();
-    service.addToFeed(Status.fromDto(request.post)!, request.followeesAlias);
     
     // after this, we are done because now they are posted
 
