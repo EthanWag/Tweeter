@@ -1,4 +1,4 @@
-import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
+import { SQSClient, SendMessageCommand, SendMessageBatchCommand } from "@aws-sdk/client-sqs";
 import { StatusService } from "../../model/service/StatusService";
 import { PostRequest } from 'tweeter-shared';
 
@@ -14,21 +14,19 @@ export const handler = async (event:any) => {
             const service = new StatusService();
 
             // 2. Make a feed service object and call the associated method
-            const followers = await service.getUsersBunch(request.alias);
-
+            const bunches = await service.getUsersBunch(request.alias);
             const sqsClient = new SQSClient();
 
-            // 6. put bunch inside the queue the bunches of UpdateFeedRequests
-            followers.forEach(async(batch:string[]) => {
-                await sqsClient.send(new SendMessageCommand({
+            for (const batch of bunches) {
+                const command = new SendMessageBatchCommand({
                     QueueUrl: FEEDQUEUE,
-                    MessageBody: JSON.stringify({
-                        post: request.post,
-                        followeesAlias: batch,
-                    }),
-                }));
-            });
-            // are done after this
+                    Entries: batch.map((group, index) => ({
+                        Id: `msg-${index}`,
+                        MessageBody: JSON.stringify(group)
+                    }))
+                });
+                await sqsClient.send(command);
+            }
         });
     }catch(error){
         console.error("Error processing SQS message:", error);

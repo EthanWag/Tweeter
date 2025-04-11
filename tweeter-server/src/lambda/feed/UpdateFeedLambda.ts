@@ -5,6 +5,8 @@ import { StatusService } from '../../model/service/StatusService';
 // type should be [User[],Status], possibly an authToken(try not to)
 export const handler = async (event:any) => {
 
+    
+
     try{
 
         event.Records.forEach(async(record:any) => {
