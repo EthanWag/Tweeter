@@ -22,7 +22,10 @@ export const handler = async (event:any) => {
                     QueueUrl: FEEDQUEUE,
                     Entries: batch.map((group, index) => ({
                         Id: `msg-${index}`,
-                        MessageBody: JSON.stringify(group)
+                        MessageBody: JSON.stringify({
+                            post: request.post,
+                            followeesAlias: group
+                        })
                     }))
                 });
                 await sqsClient.send(command);

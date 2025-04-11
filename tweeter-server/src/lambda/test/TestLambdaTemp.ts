@@ -1,5 +1,4 @@
-import { handler } from "../feed/PostMessagesLambda";
-import { PagedUserItemRequest, PagedUserItemResponse  } from "tweeter-shared";
+import { handler } from "../feed/UpdateFeedLambda";
 
 
 async function main(){
@@ -7,22 +6,20 @@ async function main(){
     const event = {
         Records: [
           {
-            messageId: 'aed68896-fef1-4527-924e-7e007471f42e',
-            receiptHandle: 'AQEBwBUAoTRNfwEYny8tao9NAgQHej3j9Izqn0Cxj5QnzSXORHj6mF7VKNMx89Fm0Q8+iHQ0U63SUkxuYuSvfMqnrB46NYhw35Yzhg4c3K1v7+gdNV2GaCp/fgQhXVW0JrtmzkHwtnh+K1hQBo+KQcuRKNWva+LYk2jJfEugejwax9Y1JnLkRbIFwDVcxyrNQeHMpijGyy3b9y2O6NU2EiN0otJlwc8e8LibjnlzrckOum2fobNaKcn9Q/6Q5s3CZarMjM8s4b/V+lw2LPNscSui+9b3uZiI1arqpUujyYRXZO+LuSQEC0jjzBupmrvjnj+RDM6Dazq36hNNgV9Ff/v2+myMfKa2Cx2/yfCrTF9/PErYNaivzuhNT9amEF/FyBSIOiAONbOOx6sUMt+fPPOTNw==',
-            body: '{"alias":"@Mar","post":{"post":"this is a test","user":{"firstname":"John","lastname":"Marston","alias":"@Mar","imageUrl":"https://tweeterbin.s3.us-east-1.amazonaws.com/image/@Mar-profile-picture.png"},"timestamp":1744396509920}}',
+            messageId: '23d70d54-df97-4dda-9ff6-e24dbc252012',
+            receiptHandle: 'AQEBSdqNWTjQizTtlYNT4j0eUSrb2Y3NfnZxZYLWHnsC0cEqSl4ljImMchee4sJkCke1NXxinmBcJeiaFWj/oRki4rgzrYXQUTgsAEgUIhWMyFp3wNbM8K6nNDnZxWgF5l5AXCKV6BMMDN2i2TpnLhaxfLUISQ66F6+mCqrTscUXmLtouXo82nWuXoAdyOzSgMIlHr3OZSVo6XOK19BVSsCz88w5AhVcF8nY7V9+G4hr/0ifhZN/WQgDexSksnX+AlHm3Dm1cYQ3MDcdrA3up9F6QYHS8Tcr4EcLXXLofBetyeNbmly+fS/hrTedWuVz/qKAQ9u28fV9h+thlm2N2RFDa1ljOy/xEmjL48BXij2+bXIptK6oqSHGUBogtR/IYHjMgD7TFbyb1VWrK52ozclF5w==',
+            body: '["@Ewags"]',
             attributes: [Object],
             messageAttributes: {},
-            md5OfBody: 'edee6f6b525b3b039d9cf7574cdd4b4c',
+            md5OfBody: '690cfba04852e361f19312af75f73e02',
             eventSource: 'aws:sqs',
-            eventSourceARN: 'arn:aws:sqs:us-east-1:324037310840:TweeterPostQueue',
+            eventSourceARN: 'arn:aws:sqs:us-east-1:324037310840:TweeterFeedQueue',
             awsRegion: 'us-east-1'
           }
         ]
       }
 
-    const final = await handler(event);
-
-    console.log(final);
+    await handler(event);
 
 }
 
