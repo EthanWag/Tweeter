@@ -8,9 +8,9 @@ const FEEDQUEUE = 'https://sqs.us-east-1.amazonaws.com/324037310840/TweeterFeedQ
 export const handler = async (event:any) => {
 
     try {
-        event.Records.forEach(async(record:any) => {
-            const request:PostRequest = JSON.parse(record.body);
+        for (const record of event.Records) {
 
+            const request:PostRequest = JSON.parse(record.body);
             const service = new StatusService();
 
             // 2. Make a feed service object and call the associated method
@@ -30,7 +30,7 @@ export const handler = async (event:any) => {
                 });
                 await sqsClient.send(command);
             }
-        });
+        }
     }catch(error){
         console.error("Error processing SQS message:", error);
     }

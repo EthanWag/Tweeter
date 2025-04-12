@@ -67,12 +67,12 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
 
     public async addToFeed(post: Status, alias: string, followeeAlias: string[]): Promise<void> {
         try{
-            followeeAlias.forEach(async (followeeAlias) => {
+            for(const followee of followeeAlias){
                 await this.dbClientOperation(
                     new PutCommand({
                         TableName: this.FeedTable,
                         Item: {
-                            followeeAlias: followeeAlias,
+                            followeeAlias: followee,
                             alias: alias,
                             timestamp: post.timestamp,
                             post: post.post,
@@ -86,7 +86,7 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
                     }),
                     "putting post into feed"
                 )
-            });
+            }
         }catch(error){
             throw error
         }

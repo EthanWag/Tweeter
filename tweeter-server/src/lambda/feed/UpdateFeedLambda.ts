@@ -6,12 +6,8 @@ import { StatusService } from '../../model/service/StatusService';
 export const handler = async (event:any) => {
 
     try{
-
-        event.Records.forEach(async(record:any) => {
-
+        for(const record of event.Records){
             const request:FeedRequest = JSON.parse(record.body);
-
-            console.log(request);
 
             if (!request.post) {
                 throw new Error("No post provided");  
@@ -19,8 +15,7 @@ export const handler = async (event:any) => {
         
             const service = new StatusService();
             service.addToFeed(Status.fromDto(request.post)!, request.followeesAlias);
-
-        });
+        }
 
     }catch(error){
         console.error("Error processing SQS message:", error);

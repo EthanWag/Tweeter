@@ -69,7 +69,7 @@ export class StatusService {
 
   public async addToFeed(newStatus: Status, followeeAlias: string[]): Promise<void> {
 
-    await this.addToFeed(newStatus,followeeAlias)
+    await this.postDAO.addToFeed(newStatus,newStatus.user.alias,followeeAlias)
     // we are simple done after this
   }
 
