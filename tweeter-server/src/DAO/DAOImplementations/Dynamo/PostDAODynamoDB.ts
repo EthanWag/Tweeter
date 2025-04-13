@@ -35,31 +35,6 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
                 }),
                 "putting post into story"
             )
-            // TODO: remove this code and put it in a seprate functiion for implementation
-            /*
-            // oof will take a long time
-            followeeList.forEach(async (followeeAlias) => {
-                await this.dbClientOperation(
-                    new PutCommand({
-                        TableName: this.FeedTable,
-                        Item: {
-                            followeeAlias: followeeAlias,
-                            alias: alias,
-                            timestamp: newStatus.timestamp,
-                            post: newStatus.post,
-
-                            // info about the user who posted the story
-                            authorAlias: newStatus.user.alias,
-                            authorFirstName: newStatus.user.firstName,
-                            authorLastName: newStatus.user.lastName,
-                            authorImage: newStatus.user.imageUrl
-                        },
-                    }),
-                    "putting post into feed"
-                )
-            });
-            */
-
         }catch(error){
             throw error
         }

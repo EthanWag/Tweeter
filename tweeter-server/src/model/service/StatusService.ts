@@ -68,9 +68,7 @@ export class StatusService {
   }
 
   public async addToFeed(newStatus: Status, followeeAlias: string[]): Promise<void> {
-
     await this.postDAO.addToFeed(newStatus,newStatus.user.alias,followeeAlias)
-    // we are simple done after this
   }
 
   public async getUsersBunch(alias:string):Promise<string[][][]>{
