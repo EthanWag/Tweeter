@@ -19,4 +19,4 @@ tweeterPostStatus | lambda/post/PostStatusLambda.handler
 tweeterPostMessages | lambda/feed/PostMessagesLambda.handler
 tweeterUpdateFeed | lambda/feed/UpdateFeedLambda.handler
 '
-LAMBDALAYER_ARN='arn:aws:lambda:us-east-1:324037310840:layer:tweeterLambdaLayer:49'
+LAMBDALAYER_ARN='arn:aws:lambda:us-east-1:324037310840:layer:tweeterLambdaLayer:54'

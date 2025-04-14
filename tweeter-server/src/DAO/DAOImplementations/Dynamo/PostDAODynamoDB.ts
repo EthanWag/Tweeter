@@ -41,9 +41,9 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
     }
 
     public async addToFeed(post: Status, alias: string, followeeAlias: string[]): Promise<void> {
-        try{
-            for(const followee of followeeAlias){
-                await this.dbClientOperation(
+        try {
+            const res = await Promise.all(followeeAlias.map(followee => 
+                this.dbClientOperation(
                     new PutCommand({
                         TableName: this.FeedTable,
                         Item: {
@@ -51,8 +51,6 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
                             alias: alias,
                             timestamp: post.timestamp,
                             post: post.post,
-
-                            // info about the user who posted the story
                             authorAlias: post.user.alias,
                             authorFirstName: post.user.firstName,
                             authorLastName: post.user.lastName,
@@ -61,9 +59,10 @@ export class PostDAODynamoDB extends DynamoResources implements PostDAO {
                     }),
                     "putting post into feed"
                 )
-            }
-        }catch(error){
-            throw error
+            ));
+            // console.log(res)
+        } catch (error) {
+            throw new Error(`Failed to add post to feed: ${(error as Error).message}`);
         }
     }
 

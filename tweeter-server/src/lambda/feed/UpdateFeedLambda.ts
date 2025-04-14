@@ -14,7 +14,7 @@ export const handler = async (event:any) => {
             }
         
             const service = new StatusService();
-            service.addToFeed(Status.fromDto(request.post)!, request.followeesAlias);
+            await service.addToFeed(Status.fromDto(request.post)!, request.followeesAlias);
         }
 
     }catch(error){
