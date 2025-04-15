@@ -11,11 +11,7 @@ export class PostsService {
         return res[0];
     }
 
-    public async postStatus(authToken: AuthToken,newStatus: Status): Promise<void> {
-        // Pause so we can see the logging out message. Remove when connected to the server
-        await new Promise((f) => setTimeout(f, 2000));
-    
-        // TODO: Call the server to post the status
+    public async postStatus(authToken: AuthToken,newStatus: Status): Promise<void> {    
         const facade = new ServerFacade();
         const res = await facade.postStatus({token: authToken.token,user: newStatus.dto});
         

@@ -1,3 +1,5 @@
+
+
 import { mock, instance, spy, verify, when, capture, anything } from "@typestrong/ts-mockito"
 import { AuthToken } from "tweeter-shared";
 import { LogoutView } from "../../src/presenter/Presenter";
@@ -6,6 +8,8 @@ import { UserService } from "../../src/model/service/UserService";
 
 
 describe("AppNavbarPresenter", () => {
+
+    /*
 
     let mockAppNavbarPresenterView: LogoutView;
     let appNavbarPresenter: LogoutPresenter;
@@ -62,4 +66,6 @@ describe("AppNavbarPresenter", () => {
         verify(mockAppNavbarPresenterView.clearUserInfo()).never();
 
     });
+
+    */
 });

@@ -1,0 +1,2 @@
+// "<rootDir>/test/**/*.test.tsx",
+// "<rootDir>/test/**/*.test.ts"

@@ -20,11 +20,18 @@ export class PostStatusPresenter extends Presenter<PostView> {
         return this._postService;
     }
 
+    // good for testing
+
+    public createPostService(postService: PostsService):void {
+        this._postService = postService;
+    }
+
     public async submitPost(event: React.MouseEvent | null, post: string, currentUser: User, authToken: AuthToken) {
         if(event){
             event.preventDefault();
         }
-        this.doUpdateOperation(async () => {
+
+        await this.doUpdateOperation(async () => {
             this.view.displayInfoMessage("Posting status...", 0);
             const status = new Status(post, currentUser!, Date.now());
             await this.postService.postStatus(authToken!, status);
@@ -33,6 +40,7 @@ export class PostStatusPresenter extends Presenter<PostView> {
         },
         "post the status",
         this.view);
+
 
         this.view.clearLastInfoMessage();
     }

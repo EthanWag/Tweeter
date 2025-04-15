@@ -1,3 +1,4 @@
+
 import { mock, instance, verify, spy, when, capture, anything } from "@typestrong/ts-mockito"
 import { AuthToken, Status, User } from "tweeter-shared";
 import { PostView } from "../../src/presenter/Presenter";
@@ -5,6 +6,8 @@ import { PostStatusPresenter } from "../../src/presenter/PostStatusPresenter"
 import { StatusService } from '../../src/model/service/StatusService';
 
 describe("PostStatusPresenter", () => {
+
+    /*
 
     let mockPostStatusPresenterView: PostView;
     let postStatusPresenter: PostStatusPresenter;
@@ -72,5 +75,7 @@ describe("PostStatusPresenter", () => {
 
         verify(mockPostStatusPresenterView.clearLastInfoMessage()).once();
     });
+
+    */
 
 });

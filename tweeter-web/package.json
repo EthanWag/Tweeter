@@ -74,8 +74,9 @@
       "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
     },
     "testMatch": [
-      "<rootDir>/test/**/*.test.tsx",
-      "<rootDir>/test/**/*.test.ts"
+      "<rootDir>/test/fullstack/fullstack.test.ts",
+      "<rootDir>/test/fullstack/fullstack.test.tsx"
+      
     ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest",

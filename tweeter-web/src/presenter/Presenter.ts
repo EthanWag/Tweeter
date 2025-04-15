@@ -63,6 +63,7 @@ export class Presenter<V extends View>{
         operationDiscription:string,
         view: L
     ) {
+
         try {
             view.setIsLoading(true);
             await operation();

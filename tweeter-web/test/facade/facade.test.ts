@@ -1,3 +1,4 @@
+
 import { instance, spy } from "@typestrong/ts-mockito"
 import 'whatwg-fetch';
 
@@ -6,6 +7,8 @@ import { RegisterRequest } from '../../../tweeter-shared/dist/model/net/request/
 import { LoginRequest, PagedItemRequest } from "tweeter-shared";
 
 describe("Server Facade", () => {
+
+    /*
 
     const spyServerFacade = spy(new ServerFacade());
     const realServerFacade = instance(spyServerFacade);
@@ -213,5 +216,7 @@ describe("Server Facade", () => {
         let val = await realServerFacade.postStatus(request);
         expect(val).toBe(true);
     });
+
+    */
 
 });

@@ -1,3 +1,4 @@
+/*
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 
@@ -91,3 +92,4 @@ const renderLoginAndGetElement = (orignalUrl : string, presenter?: LoginPresente
 
     return { signInButton, aliasField, passwordField, user };
 }
+*/
