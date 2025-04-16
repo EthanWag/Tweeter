@@ -15,7 +15,7 @@
                 "--testEnvironment=jsdom",
                 "--no-cache",
                 "--verbose",
-                "tweeter-web/test/facade/facade.test.ts"
+                "tweeter-web/test/fullstack/fullstack.test.ts"
             ],
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen"

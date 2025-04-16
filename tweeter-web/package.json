@@ -17,6 +17,7 @@
     "react-dom": "^18.2.0",
     "react-infinite-scroll-component": "^6.1.0",
     "react-router-dom": "^6.22.2",
+    "ts-node": "^10.9.2",
     "tweeter-shared": "file:../tweeter-shared",
     "typescript": "^4.9.5",
     "vite-plugin-commonjs": "^0.8.2",
@@ -76,7 +77,6 @@
     "testMatch": [
       "<rootDir>/test/fullstack/fullstack.test.ts",
       "<rootDir>/test/fullstack/fullstack.test.tsx"
-      
     ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest",

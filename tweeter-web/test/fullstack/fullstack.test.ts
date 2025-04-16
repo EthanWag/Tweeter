@@ -33,10 +33,9 @@ describe("Tweeter Appliation", () => {
         }
     });
 
-/*    
+    
 
-    it("posts a status from the user", async () => {
-
+    it("can update 10000 feeds in about 30 seconds", async () => {
         const status = new Status("This is a post from carol",myUser!,1000);        
 
         const valid = await server.postStatus({
@@ -44,6 +43,13 @@ describe("Tweeter Appliation", () => {
             user: status.dto
         });
         expect(valid).toBe(true);
+    });
+
+/*    
+
+    it("posts a status from the user", async () => {
+
+        // need to make a new user to test it on
     });
 
     it("is able to get the post from the story", async () => {
@@ -87,35 +93,4 @@ describe("Tweeter Appliation", () => {
 
     });
     */
-
-    it("can update 10000 feeds in about 30 seconds", async () => {
-
-        // await registerUsers(server,myUser!);
-
-    });
 });
-
-
-async function registerUsers(server:ServerFacade,userToFollow:User):Promise<void>{
-
-    const firstName = "dumby"
-    const lastName = "dumby"
-    const alias = "@dumby"
-    const password = "admin";
-
-    for(let i = 0; i < 10000; i++){
-        console.log("Registering user " + i);
-        const[user,auth] = await server.register({alias: alias + 1, 
-                        password: password, 
-                        firstName: firstName, 
-                        lastName: lastName,
-                        userImageBytes: "nada",
-                        imageFileExtension: "nada"})
-
-        if(user === null || auth === null) {
-            throw new Error("Registration failed");
-        }
-
-        await server.follow({user: userToFollow.dto, token: auth.token});
-    }
-}

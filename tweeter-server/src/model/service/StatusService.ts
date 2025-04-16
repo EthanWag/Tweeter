@@ -102,7 +102,7 @@ export class StatusService {
           group.push(aliases)
     
           // 5. bunches these up in aliases of 100 and then groups of 10
-        } while((aliases.length === 100) && (group.length < 10));
+        } while((aliases.length === 100) && (group.length < 25));
 
         return group; 
 
