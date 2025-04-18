@@ -41,7 +41,7 @@ export class FolloweesDAODynamoDB extends DynamoResources implements FolloweesDA
                         ":alias": alias
                     },
                     Limit: pageNumber,
-                    ExclusiveStartKey: lastAlias ? { alias, followeesAlias: lastAlias } : undefined
+                    ExclusiveStartKey: lastAlias ? { alias, followeeAlias: lastAlias } : undefined
                 }),
                 "get followees paged"
             )

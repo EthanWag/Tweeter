@@ -8,6 +8,10 @@ import { FolloweesDAO } from "../../DAO/DAOInterfaces/FolloweesDAO";
 
 export class StatusService {
 
+  // temp do not keep
+  private count = 0
+
+
   private readonly postDAO: PostDAO;
   private readonly authDAO: AuthDAO;
   private readonly userDAO: UserDAO;
@@ -76,13 +80,9 @@ export class StatusService {
 
   public async getUsersBunch(alias:string):Promise<string[][][]>{
 
-    let bunches:string[][][] = []
-    do{
-      const bunch = await this.getUsersGroup(alias)
-      bunches.push(bunch)
-    }while(bunches.length === this.BUNCH_SIZE && bunches[9].length === this.MAX_FEED_SIZE); // MAGIC NUMBERS, SOLVE THIS
+    const allFollowers = await this.followeeDAO.getFolloweesPaged(alias, null)
 
-    return bunches;
+    return this.bunchFollowers(allFollowers);
   }
   
   public async getPosts(alias:string): Promise<User | null> {
@@ -94,22 +94,27 @@ export class StatusService {
     }
   }
 
-  private async getUsersGroup(alias:string):Promise<string[][]>{
+  private bunchFollowers(followers:string[]):string[][][] {
 
-        // we want to first get them in groups of 100 alias
-        let lastAlias:string | null = null;
-        let group:string[][] = []
-        let aliases:string[] = []
-        do{
-          // 4. get the users from the database
-          const aliases = await this.followeeDAO.getFolloweesPaged(alias, lastAlias, 100)
-          group.push(aliases)
-          lastAlias = aliases[aliases.length - 1]; // get the last alias
-    
-          // 5. bunches these up in aliases of 100 and then groups of 10
-        } while((aliases.length === this.MAX_FEED_SIZE) && (group.length < this.BUNCH_SIZE));
+    const result: string[][][] = [];
+    const rowSize = 100;
+    const blockRows = 10;
+    const blockSize = rowSize * blockRows;
+  
+    for (let i = 0; i < followers.length; i += blockSize) {
+      const block: string[][] = [];
+  
+      for (let j = i; j < i + blockSize && j < followers.length; j += rowSize) {
+        const row = followers.slice(j, j + rowSize);
+        block.push(row);
+      }
+  
+      result.push(block);
+    }
+  
+    return result;
 
-        return group; 
 
   }
+
 }

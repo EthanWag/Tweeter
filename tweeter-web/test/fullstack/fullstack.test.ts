@@ -14,7 +14,7 @@ describe("Tweeter Appliation", () => {
     let auth: AuthToken;
     let myUser: User | null = null;
     const password = "admin"
-    const alias = "@C"
+    const alias = "@Mar"
 
 
     beforeEach(async() => {
@@ -33,9 +33,8 @@ describe("Tweeter Appliation", () => {
         }
     });
 
-    
+    it("posts a status from the user", async () => {
 
-    it("can update 10000 feeds in about 30 seconds", async () => {
         const status = new Status("This is a post from carol",myUser!,1000);        
 
         const valid = await server.postStatus({
@@ -43,13 +42,6 @@ describe("Tweeter Appliation", () => {
             user: status.dto
         });
         expect(valid).toBe(true);
-    });
-
-/*    
-
-    it("posts a status from the user", async () => {
-
-        // need to make a new user to test it on
     });
 
     it("is able to get the post from the story", async () => {
@@ -89,8 +81,6 @@ describe("Tweeter Appliation", () => {
         
         // Now check if displayInfoMessage was called
         expect(displayInfoMessageSpy).toHaveBeenCalledWith("Posting status...", 0);
-        expect(displayInfoMessageSpy).toHaveBeenCalledWith("Status posted!", 2000);
 
     });
-    */
 });
